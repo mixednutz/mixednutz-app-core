@@ -6,6 +6,14 @@ public interface ComponentSettings {
 	
 	Map<String, ?> getSettings();
 	
+	// TIMELINE
+	
+	boolean includeTimelineTemplateHtmlFragment();
+	
+	String includeTimelineTemplateHtmlFragmentName();
+	
+	//SETTINGS
+	
 	boolean includeHtmlFragment();
 	
 	String includeHtmlFragmentName();

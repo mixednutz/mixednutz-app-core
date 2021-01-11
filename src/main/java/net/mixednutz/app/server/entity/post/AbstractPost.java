@@ -32,6 +32,8 @@ import net.mixednutz.app.server.entity.Visibility;
 @MappedSuperclass
 public abstract class AbstractPost<C extends AbstractPostComment> implements Post<C> {
 			
+	private int hashCode = Integer.MIN_VALUE;
+	
 	private Long id;
 	private String description;
 	private ZonedDateTime dateCreated; //creation Date
@@ -148,6 +150,41 @@ public abstract class AbstractPost<C extends AbstractPostComment> implements Pos
 
 	public void setOwnerId(Long ownerId) {
 		this.ownerId = ownerId;
+	}
+	
+	public int hashCode () {
+		if (Integer.MIN_VALUE == this.hashCode) {
+			if (null == this.getId()) return super.hashCode();
+			
+				String hashStr = this.getClass().getName() + ":" + this.getId().hashCode();
+				this.hashCode = hashStr.hashCode();
+			
+		}
+		return this.hashCode;
+	}
+	
+	/* (non-Javadoc)
+	 * @see java.lang.Object#equals(java.lang.Object)
+	 */
+	public boolean equals(Object obj) {
+		if (obj==null || !(obj instanceof AbstractPost)) {
+			return false;
+		}
+				
+		if (this.getClass().isAssignableFrom(obj.getClass()) 
+						|| obj.getClass().isAssignableFrom(this.getClass())) {
+			
+			@SuppressWarnings("unchecked")
+			AbstractPost<C> obj2 = (AbstractPost<C>) obj;
+			
+			if (this.getId()==null && obj2.getId()==null) {
+				return true;
+			} else if (this.getId()==null ^ obj2.getId()==null) {
+				return false;
+			}
+			return (this.getId().equals(obj2.getId()));
+		}
+		return false;
 	}
 	
 
