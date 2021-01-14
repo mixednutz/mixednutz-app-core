@@ -13,16 +13,16 @@ import javax.persistence.Table;
 @Table(name="Emoji_Subcategory")
 public class EmojiSubCategory {
 
-	private String id;
+	private Integer id;
 	private String name;
 	private EmojiCategory parentCategory;
 	private List<Emoji> emoji;
 	
 	@Id
-	public String getId() {
+	public Integer getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 	public String getName() {

@@ -1,5 +1,8 @@
 package net.mixednutz.app.server.entity;
 
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -13,6 +16,8 @@ import org.hibernate.annotations.GenericGenerator;
 @Entity
 @Table(name="Emoji")
 public class Emoji  {
+	
+	private static Pattern pattern = Pattern.compile("(U\\+)?([0-9A-F]+)");
 	
 	private String id;
 	private Integer sortId;
@@ -52,14 +57,45 @@ public class Emoji  {
 	}
 	@Transient
 	public String getHtmlCode() {
-		if (getId()!=null) {
+		return getHtmlCode(getId());
+	}
+	@Transient
+	public String getText() {
+		return getText(getId());
+	}
+	
+	public static String getHtmlCode(String code) {
+		if (code!=null) {
 			StringBuffer buffer = new StringBuffer();
-			for (String part: getId().split("_")) {
-				buffer.append("&#x");
-				buffer.append(part);
-				buffer.append(";");
+			for (String c: code.split(" ")) {
+				Matcher matcher = pattern.matcher(c);
+				if (matcher.matches()) {
+					String group2 = matcher.group(2);
+					buffer.append("&#x")
+						.append(group2)
+						.append(";");
+				}
 			}
 			return buffer.toString();
+		}
+		return null;
+	}
+	
+	public static String getText(String code) {
+		if (code!=null) {
+			String[] split = code.split(" ");
+			int[] codepoints = new int[split.length];
+			int i =0;
+			for (String c: split) {
+				Matcher matcher = pattern.matcher(c);
+				if (matcher.matches()) {
+					String group2 = matcher.group(2);
+					int hex = Integer.parseInt(group2, 16);
+					codepoints[i] = hex;
+				}
+				i++;
+			}
+			return new String(codepoints, 0, codepoints.length);
 		}
 		return null;
 	}
