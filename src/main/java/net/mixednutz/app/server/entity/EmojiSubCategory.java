@@ -9,6 +9,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="Emoji_Subcategory")
 public class EmojiSubCategory {
@@ -31,6 +33,7 @@ public class EmojiSubCategory {
 	public void setName(String name) {
 		this.name = name;
 	}
+	@JsonIgnore
 	@ManyToOne
 	public EmojiCategory getParentCategory() {
 		return parentCategory;
@@ -38,6 +41,7 @@ public class EmojiSubCategory {
 	public void setParentCategory(EmojiCategory parentCategory) {
 		this.parentCategory = parentCategory;
 	}
+	@JsonIgnore
 	@OneToMany(mappedBy="subCategory", cascade=CascadeType.ALL, orphanRemoval=true)
 	public List<Emoji> getEmoji() {
 		return emoji;

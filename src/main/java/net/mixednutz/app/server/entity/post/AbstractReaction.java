@@ -24,6 +24,9 @@ import org.hibernate.annotations.NotFoundAction;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
+import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
+
 import net.mixednutz.app.server.entity.Emoji;
 import net.mixednutz.app.server.entity.User;
 
@@ -34,6 +37,9 @@ import net.mixednutz.app.server.entity.User;
     name="type",
     discriminatorType=DiscriminatorType.STRING
 )
+@JsonTypeInfo(property = "type", 
+	use = com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME, 
+	include = As.PROPERTY, visible=true) 
 public abstract class AbstractReaction {
 
 	private Long id;

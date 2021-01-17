@@ -13,6 +13,8 @@ import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="Emoji")
 public class Emoji  {
@@ -42,6 +44,7 @@ public class Emoji  {
 	public void setId(String id) {
 		this.id = id;
 	}
+	@JsonIgnore
 	@ManyToOne()
 	public EmojiSubCategory getSubCategory() {
 		return subCategory;
