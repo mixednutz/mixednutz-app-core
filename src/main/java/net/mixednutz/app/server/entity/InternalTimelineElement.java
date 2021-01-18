@@ -93,6 +93,10 @@ public class InternalTimelineElement implements ITimelineElement {
 	 */
 	private List<ReshareCount> reshares;
 	
+	/**
+	 * Optional list of comments about this element
+	 */
+	private List<InternalTimelineElement> comments;
 	
 	public InternalTimelineElement() {
 		super();
@@ -231,6 +235,14 @@ public class InternalTimelineElement implements ITimelineElement {
 
 	public void setReshares(List<ReshareCount> reshares) {
 		this.reshares = reshares;
+	}
+
+	public List<InternalTimelineElement> getComments() {
+		return comments;
+	}
+
+	public void setComments(List<InternalTimelineElement> comments) {
+		this.comments = comments;
 	}
 
 

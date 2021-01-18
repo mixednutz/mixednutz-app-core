@@ -13,10 +13,13 @@ import net.mixednutz.app.server.entity.User;
  */
 public interface Comment {
 	
+	public String getBody();
 	public void setBody(String body);
 	
+	public User getAuthor();
 	public void setAuthor(User author);
 	
+	public ZonedDateTime getDateCreated();
 	public void setDateCreated(ZonedDateTime timestamp);
 	
 	public <C extends Comment> void setParentComment(C parentComment);

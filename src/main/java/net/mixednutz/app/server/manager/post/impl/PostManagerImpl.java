@@ -3,7 +3,9 @@ package net.mixednutz.app.server.manager.post.impl;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -121,5 +123,15 @@ public abstract class PostManagerImpl<P extends Post<C>, C extends PostComment, 
 	public void incrementViewCount(P post, User viewer) {
 		postViewManager.addView(post, viewer);
 	}
+	
+	public Map<Long, User> loadCommentAuthors(Iterable<C> comments) {
+		Map<Long, User> authorsById = new HashMap<>();
+		for (C comment : comments) {
+			if (comment.getAuthor()!=null) {
+				authorsById.put(comment.getAuthor().getUserId(), comment.getAuthor());
+			}
+		}
+		return authorsById;
+	}	
 
 }
