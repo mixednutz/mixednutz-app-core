@@ -85,17 +85,17 @@ public abstract class PostManagerImpl<P extends Post<C>, C extends PostComment, 
 					return ZonedDateTime.parse(str).toInstant();
 				});
 		if (paging.getStart()==null) {
-			contents = postRepository.getUsersPostsByDateCreatedLessThanEquals(
+			contents = postRepository.getUsersPostsByDatePublishedLessThanEquals(
 					owner, viewer, ZonedDateTime.now(), 
 					PageRequest.of(0, paging.getPageSize()));
 		} else {
 			ZonedDateTime start = ZonedDateTime.from(pageRequest.getStart());
 			if (paging.getDirection()==Direction.LESS_THAN) {
-				contents = postRepository.getUsersPostsByDateCreatedLessThanEquals(
+				contents = postRepository.getUsersPostsByDatePublishedLessThanEquals(
 						owner, viewer, start, 
 						PageRequest.of(0, paging.getPageSize()));
 			} else {
-				contents = postRepository.getUsersPostsByDateCreatedGreaterThan(
+				contents = postRepository.getUsersPostsByDatePublishedGreaterThan(
 						owner, viewer, start, 
 						PageRequest.of(0, paging.getPageSize()));
 			}

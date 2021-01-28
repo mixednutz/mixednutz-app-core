@@ -24,16 +24,16 @@ import net.mixednutz.app.server.entity.post.PostComment;
 @NoRepositoryBean
 public interface PostRepository<P extends Post<C>, C extends PostComment> extends CrudRepository<P, Long> {
 
-	List<P> findByOwnerAndDateCreatedGreaterThanOrderByDateCreatedDesc(User owner, ZonedDateTime dateCreated, Pageable pageRequest);
+	List<P> findByOwnerAndDatePublishedGreaterThanOrderByDatePublishedDesc(User owner, ZonedDateTime datePublished, Pageable pageRequest);
 	
-	default List<P> getMyPostsGreaterThan(User owner, ZonedDateTime dateCreated, Pageable pageRequest) {
-		return findByOwnerAndDateCreatedGreaterThanOrderByDateCreatedDesc(owner, dateCreated, pageRequest);
+	default List<P> getMyPostsGreaterThan(User owner, ZonedDateTime datePublished, Pageable pageRequest) {
+		return findByOwnerAndDatePublishedGreaterThanOrderByDatePublishedDesc(owner, datePublished, pageRequest);
 	}
 	
-	List<P> findByOwnerAndDateCreatedLessThanEqualOrderByDateCreatedDesc(User owner, ZonedDateTime dateCreated, Pageable pageRequest);
+	List<P> findByOwnerAndDatePublishedLessThanEqualOrderByDatePublishedDesc(User owner, ZonedDateTime datePublished, Pageable pageRequest);
 	
-	default List<P> getMyPostsLessThan(User owner, ZonedDateTime dateCreated, Pageable pageRequest) {
-		return findByOwnerAndDateCreatedLessThanEqualOrderByDateCreatedDesc(owner, dateCreated, pageRequest);
+	default List<P> getMyPostsLessThan(User owner, ZonedDateTime datePublished, Pageable pageRequest) {
+		return findByOwnerAndDatePublishedLessThanEqualOrderByDatePublishedDesc(owner, datePublished, pageRequest);
 	}
 	
 	Optional<P> findByOwnerAndId(User owner, Long id);
@@ -47,14 +47,14 @@ public interface PostRepository<P extends Post<C>, C extends PostComment> extend
 			  + " or p.visibility.visibilityType = 'WORLD'"
 			  + " or (p.visibility.visibilityType = 'ALL_USERS' and :viewerId is not null)"
 			  + " or (p.visibility.visibilityType = 'SELECT_FOLLOWERS' and vsf.userId = :viewerId))"
-			  + " and p.dateCreated > :dateCreated")
-	List<P> queryUsersPostsByDateCreatedGreaterThan(
+			  + " and p.datePublished > :datePublished")
+	List<P> queryUsersPostsByDatePublishedGreaterThan(
 			@Param("ownerId")Long ownerId, 
 			@Param("viewerId")Long viewerId, 
-			@Param("dateCreated")ZonedDateTime dateCreated, Pageable pageRequest);
+			@Param("datePublished")ZonedDateTime datePublished, Pageable pageRequest);
 	
-	default List<P> getUsersPostsByDateCreatedGreaterThan(User owner, User viewer, ZonedDateTime dateCreated, Pageable pageRequest) {
-		return queryUsersPostsByDateCreatedGreaterThan(owner.getUserId(), viewer!=null?viewer.getUserId():null, dateCreated, pageRequest);
+	default List<P> getUsersPostsByDatePublishedGreaterThan(User owner, User viewer, ZonedDateTime datePublished, Pageable pageRequest) {
+		return queryUsersPostsByDatePublishedGreaterThan(owner.getUserId(), viewer!=null?viewer.getUserId():null, datePublished, pageRequest);
 	}
 	
 
@@ -66,14 +66,14 @@ public interface PostRepository<P extends Post<C>, C extends PostComment> extend
 			  + " or p.visibility.visibilityType = 'WORLD'"
 			  + " or (p.visibility.visibilityType = 'ALL_USERS' and :viewerId is not null)"
 			  + " or (p.visibility.visibilityType = 'SELECT_FOLLOWERS' and vsf.userId = :viewerId))"
-			  + " and p.dateCreated <= :dateCreated")
-	List<P> queryUsersPostsByDateCreatedLessThanEquals(
+			  + " and p.datePublished <= :datePublished")
+	List<P> queryUsersPostsByDatePublishedLessThanEquals(
 			@Param("ownerId")Long ownerId, 
 			@Param("viewerId")Long viewerId, 
-			@Param("dateCreated")ZonedDateTime dateCreated, Pageable pageRequest);
+			@Param("datePublished")ZonedDateTime datePublished, Pageable pageRequest);
 	
-	default List<P> getUsersPostsByDateCreatedLessThanEquals(User owner, User viewer, ZonedDateTime dateCreated, Pageable pageRequest) {
-		return queryUsersPostsByDateCreatedLessThanEquals(owner.getUserId(), viewer!=null?viewer.getUserId():null, dateCreated, pageRequest);
+	default List<P> getUsersPostsByDatePublishedLessThanEquals(User owner, User viewer, ZonedDateTime datePublished, Pageable pageRequest) {
+		return queryUsersPostsByDatePublishedLessThanEquals(owner.getUserId(), viewer!=null?viewer.getUserId():null, datePublished, pageRequest);
 	}
 	
 }

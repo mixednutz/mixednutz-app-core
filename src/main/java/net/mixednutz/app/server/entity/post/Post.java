@@ -28,6 +28,9 @@ public interface Post<C extends PostComment> {
 	ZonedDateTime getDateCreated();
 	void setDateCreated(ZonedDateTime timestamp);
 	
+	ZonedDateTime getDatePublished();
+	void setDatePublished(ZonedDateTime timestamp);
+	
 	void setCommentsAllowed(boolean commentsAllowed);
 	
 	void setComments(List<C> comments);

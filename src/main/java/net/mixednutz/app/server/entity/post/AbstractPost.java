@@ -37,6 +37,7 @@ public abstract class AbstractPost<C extends AbstractPostComment> implements Pos
 	private Long id;
 	private String description;
 	private ZonedDateTime dateCreated; //creation Date
+	private ZonedDateTime datePublished; //publish Date (may not be the same as dateCreated)
 	private User author;
 	private Long authorId;
 	private User owner;
@@ -102,11 +103,22 @@ public abstract class AbstractPost<C extends AbstractPostComment> implements Pos
 		return ownerId;
 	}
 
+	/**
+	 * The date this record was persisted
+	 */
 	@Column(name="timestamp")
 	public ZonedDateTime getDateCreated() {
 		return dateCreated;
 	}
 	
+	/**
+	 * This date this post was published so others can see it
+	 */
+	@Column(name="published")
+	public ZonedDateTime getDatePublished() {
+		return datePublished;
+	}
+
 	@Column(name="allowcomments")
 	public boolean isCommentsAllowed() {
 		return commentsAllowed;
@@ -118,6 +130,10 @@ public abstract class AbstractPost<C extends AbstractPostComment> implements Pos
 
 	public void setDateCreated(ZonedDateTime timestamp) {
 		this.dateCreated = timestamp;
+	}
+
+	public void setDatePublished(ZonedDateTime datePublished) {
+		this.datePublished = datePublished;
 	}
 
 	public void setAuthor(User author) {
