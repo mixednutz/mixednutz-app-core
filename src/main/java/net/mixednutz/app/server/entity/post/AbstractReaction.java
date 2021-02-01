@@ -40,7 +40,7 @@ import net.mixednutz.app.server.entity.User;
 @JsonTypeInfo(property = "type", 
 	use = com.fasterxml.jackson.annotation.JsonTypeInfo.Id.NAME, 
 	include = As.PROPERTY, visible=true) 
-public abstract class AbstractReaction {
+public abstract class AbstractReaction implements PostReaction {
 
 	private Long id;
 	private Instant dateCreated;
