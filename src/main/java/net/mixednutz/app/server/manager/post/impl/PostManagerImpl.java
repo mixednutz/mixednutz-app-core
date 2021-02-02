@@ -89,7 +89,7 @@ public abstract class PostManagerImpl<P extends Post<C>, C extends PostComment, 
 					owner, viewer, ZonedDateTime.now(), 
 					PageRequest.of(0, paging.getPageSize()));
 		} else {
-			ZonedDateTime start = ZonedDateTime.from(pageRequest.getStart());
+			ZonedDateTime start = pageRequest.getStart().atZone(ZoneId.systemDefault());
 			if (paging.getDirection()==Direction.LESS_THAN) {
 				contents = postRepository.getUsersPostsByDatePublishedLessThanEquals(
 						owner, viewer, start, 
