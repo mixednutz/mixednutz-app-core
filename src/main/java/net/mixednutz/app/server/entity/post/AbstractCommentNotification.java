@@ -23,6 +23,11 @@ public abstract class AbstractCommentNotification<P extends Post<C>, C extends P
 	public AbstractCommentNotification(String type) {
 		super(type);
 	}
+	
+	@Transient
+	public P getPost() {
+		return post;
+	}
 
 	@Column(name="comment_id", insertable=true, updatable=false)
 	public Long getCommentId() {

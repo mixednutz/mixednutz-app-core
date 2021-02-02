@@ -22,6 +22,11 @@ public abstract class AbstractReactionNotification<P extends Post<C>, C extends 
 		super(type);
 	}
 	
+	@Transient
+	public P getReactedTo() {
+		return reactedTo;
+	}
+	
 	@Column(name="reaction_id", insertable=true, updatable=false)
 	public Long getReactionId() {
 		return reactionId;
@@ -34,11 +39,15 @@ public abstract class AbstractReactionNotification<P extends Post<C>, C extends 
 	public void setReaction(R reaction) {
 		this.reaction = reaction;
 	}
+	
+	@Transient
+	public Long getReactorId() {
+		return reaction.getReactorId();
+	}
 
 	@Transient
 	public String getUri() {
-		return null;
-//		return reaction.getParentUri();
+		return reaction.getParentUri();
 	}
 	
 	@Transient

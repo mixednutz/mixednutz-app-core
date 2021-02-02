@@ -7,6 +7,8 @@ import net.mixednutz.app.server.entity.User;
 import net.mixednutz.app.server.entity.UserProfile;
 
 public interface ApiManager {
+	
+	public String getAvatarUri(String avatarFilename);
 
 	public <E> InternalTimelineElement toTimelineElement(E entity, User viewer);
 	
