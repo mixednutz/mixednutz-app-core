@@ -27,6 +27,8 @@ public class UserProfile implements IUserProfile {
 	private String pronouns;
 	private String website;
 	
+	private String discordInviteCode;
+	
 	private Integer twitterAccountId;
 	private Oauth1AuthenticatedFeed twitterAccount;
 	
@@ -96,6 +98,14 @@ public class UserProfile implements IUserProfile {
 
 	public void setWebsite(String website) {
 		this.website = website;
+	}
+
+	public String getDiscordInviteCode() {
+		return discordInviteCode;
+	}
+
+	public void setDiscordInviteCode(String discordInviteCode) {
+		this.discordInviteCode = discordInviteCode;
 	}
 
 	public void setTwitterAccountId(Integer twitterAccountId) {
