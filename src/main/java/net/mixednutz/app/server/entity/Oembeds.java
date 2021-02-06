@@ -1,15 +1,28 @@
 package net.mixednutz.app.server.entity;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
-import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
+import net.mixednutz.api.core.model.NetworkInfo;
+
+@Component
 public class Oembeds {
+	
+	private static NetworkInfo networkInfo;
+	
+	@Autowired
+	public void setNetworkInfo(NetworkInfo networkInfo) {
+		Oembeds.networkInfo = networkInfo;
+	}
 
 	@JsonTypeInfo(  
 		    use = JsonTypeInfo.Id.NAME,  
@@ -25,8 +38,8 @@ public class Oembeds {
 	public abstract static class Oembed {
 		private String type;
 		private String version="1.0";
-		private String providerName="MixedNutz.net";
-		private String providerUrl="https://MixedNutz.net";
+		private String providerName=networkInfo.getDisplayName();
+		private String providerUrl="https://"+networkInfo.getHostName();
 		private String title;
 		private String authorName;
 		private String thumbnailUrl;
