@@ -24,6 +24,7 @@ public abstract class AbstractPostComment extends AbstractComment
 
 	private Long commentId;
 //	private AbstractPostComment inReplyTo;
+//	private Long inReplyToId;
 	private String type;
 
 	public AbstractPostComment(String type) {
@@ -47,6 +48,26 @@ public abstract class AbstractPostComment extends AbstractComment
 	public void setCommentId(Long commentId) {
 		this.commentId = commentId;
 	}
+	
+	/*
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name="inReplyTo_id")
+	public AbstractPostComment getInReplyTo() {
+		return inReplyTo;
+	}
+	@Column(name="inReplyTo_id", insertable=false, updatable=false)
+	public Long getInReplyToId() {
+		if (inReplyToId==null && inReplyTo!=null) {
+			return inReplyTo.getId();
+		}
+		return inReplyToId;
+	}
+	@OneToMany(mappedBy="inReplyTo")
+	public List<ModuleComment> getReplies() {
+		return replies
+	}
+	*/
 
 //	public AbstractPostComment getInReplyTo() {
 //		return inReplyTo;
