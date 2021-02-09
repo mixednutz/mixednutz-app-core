@@ -1,5 +1,7 @@
 package net.mixednutz.app.server.entity.post;
 
+import java.util.List;
+
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
 import javax.persistence.DiscriminatorType;
@@ -8,6 +10,9 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -23,8 +28,9 @@ public abstract class AbstractPostComment extends AbstractComment
 	 implements PostComment {
 
 	private Long commentId;
-//	private AbstractPostComment inReplyTo;
-//	private Long inReplyToId;
+	private AbstractPostComment inReplyTo;
+	private Long inReplyToId;
+	private List<AbstractPostComment> replies;
 	private String type;
 
 	public AbstractPostComment(String type) {
@@ -49,8 +55,6 @@ public abstract class AbstractPostComment extends AbstractComment
 		this.commentId = commentId;
 	}
 	
-	/*
-	@JsonIgnore
 	@ManyToOne
 	@JoinColumn(name="inReplyTo_id")
 	public AbstractPostComment getInReplyTo() {
@@ -59,27 +63,30 @@ public abstract class AbstractPostComment extends AbstractComment
 	@Column(name="inReplyTo_id", insertable=false, updatable=false)
 	public Long getInReplyToId() {
 		if (inReplyToId==null && inReplyTo!=null) {
-			return inReplyTo.getId();
+			return inReplyTo.getCommentId();
 		}
 		return inReplyToId;
 	}
 	@OneToMany(mappedBy="inReplyTo")
-	public List<ModuleComment> getReplies() {
-		return replies
+	public List<AbstractPostComment> getReplies() {
+		return replies;
 	}
-	*/
 
-//	public AbstractPostComment getInReplyTo() {
-//		return inReplyTo;
-//	}
-//
-//	public void setInReplyTo(AbstractPostComment inReplyTo) {
-//		this.inReplyTo = inReplyTo;
-//	}
-//
+	public void setInReplyTo(AbstractPostComment inReplyTo) {
+		this.inReplyTo = inReplyTo;
+	}
+
+	public void setInReplyToId(Long inReplyToId) {
+		this.inReplyToId = inReplyToId;
+	}
+
+	public void setReplies(List<AbstractPostComment> replies) {
+		this.replies = replies;
+	}
+
 	@Override
 	public <C extends Comment> void setParentComment(C parentComment) {
-//		this.inReplyTo = (AbstractPostComment) parentComment;
+		this.inReplyTo = (AbstractPostComment) parentComment;
 	}
 	
 	public void setType(String type) {
