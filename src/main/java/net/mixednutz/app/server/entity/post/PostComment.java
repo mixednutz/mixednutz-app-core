@@ -8,4 +8,6 @@ public interface PostComment extends Comment {
 	
 	String getUri();
 	
+	<C extends PostComment> C getInReplyTo();
+	
 }
