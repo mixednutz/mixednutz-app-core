@@ -3,6 +3,7 @@ package net.mixednutz.app.server.manager;
 import net.mixednutz.api.core.model.Notification;
 import net.mixednutz.app.server.entity.User;
 import net.mixednutz.app.server.entity.post.AbstractCommentNotification;
+import net.mixednutz.app.server.entity.post.AbstractPostComment;
 import net.mixednutz.app.server.entity.post.AbstractReactionNotification;
 import net.mixednutz.app.server.entity.post.GroupedPosts;
 import net.mixednutz.app.server.entity.post.Post;
@@ -14,6 +15,8 @@ public interface NotificationManager {
 	
 	<P extends Post<C>, C extends PostComment> 
 		void notifyNewComment(P replyTo, C comment);
+	
+	void notifyNewCommentReply(AbstractPostComment replyTo, AbstractPostComment comment);
 	
 	<P extends Post<C>, C extends PostComment, R extends PostReaction> 
 		void notifyNewReaction(P reactedTo, R reaction);
@@ -31,6 +34,8 @@ public interface NotificationManager {
 		boolean canConvert(Class<?> postEntityClazz);
 		
 		PostNotification createCommentNotification(P replyTo, C comment);
+		
+//		PostNotification createCommentReplyNotification(C replyTo, C comment);
 		
 		PostNotification createReactionNotification(P reactedTo, R reaction);
 		
