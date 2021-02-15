@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import net.mixednutz.app.server.entity.TagScore;
+import net.mixednutz.app.server.entity.TagsAware;
 import net.mixednutz.app.server.entity.User;
 import net.mixednutz.app.server.entity.post.AbstractTag;
 
@@ -66,6 +67,16 @@ public interface TagManager  {
 			User author, User currentUser, NewTagCallback<T> callback);
 		
 	public <T extends AbstractTag> List<TagScore> getTagScores(Set<T> tags, User author, User currentUser);
+	
+	/**
+	 * Totals all of the tags from tag enabled posts
+	 * 
+	 * @param <P>
+	 * @param <T>
+	 * @param posts
+	 * @return
+	 */
+	public <P extends TagsAware<T>, T extends AbstractTag> List<TagScore> getTagScores(Set<P> posts);
 	
 	interface NewTagCallback<T extends AbstractTag> {
 		T createTag(String tagString);

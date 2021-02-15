@@ -21,5 +21,13 @@ public interface ComponentSettings {
 	boolean includeScriptFragment();
 	
 	String includeScriptFragmentName();
+	
+	// FORMS
+	
+	boolean includeNewFormModal();
+	
+	String includeNewFormModalContentFragmentName();
+	
+	String newFormModalId();
 
 }

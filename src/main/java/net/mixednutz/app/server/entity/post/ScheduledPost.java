@@ -16,9 +16,9 @@ public interface ScheduledPost {
 	 * External Feed for crosposting this Post at the scheduled publishDate
 	 * @return
 	 */
-	Integer[] getExternalFeedId();
+	Long[] getExternalFeedId();
 
-	void setExternalFeedId(Integer[] externalFeedId);
+	void setExternalFeedId(Long[] externalFeedId);
 
 	/**
 	 * Email Friend group at the scheduled publishDate

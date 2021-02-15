@@ -28,7 +28,7 @@ public abstract class AbstractScheduledPost implements ScheduledPost  {
     private String type;
     
 	private ZonedDateTime publishDate;
-	private Integer[] externalFeedId;
+	private Long[] externalFeedId;
 	private boolean emailFriendGroup;
 	
 	private Boolean published=false;
@@ -68,10 +68,10 @@ public abstract class AbstractScheduledPost implements ScheduledPost  {
 	}
 	@Transient
 	//TODO Fix this later
-	public Integer[] getExternalFeedId() {
+	public Long[] getExternalFeedId() {
 		return externalFeedId;
 	}
-	public void setExternalFeedId(Integer[] externalFeedId) {
+	public void setExternalFeedId(Long[] externalFeedId) {
 		this.externalFeedId = externalFeedId;
 	}
 	public boolean isEmailFriendGroup() {
