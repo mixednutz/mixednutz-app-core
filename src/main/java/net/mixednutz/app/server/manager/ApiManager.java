@@ -7,15 +7,17 @@ import org.springframework.security.core.Authentication;
 import net.mixednutz.api.model.IUser;
 import net.mixednutz.api.model.IUserSmall;
 import net.mixednutz.app.server.entity.InternalTimelineElement;
+import net.mixednutz.app.server.entity.Oembeds.Oembed;
 import net.mixednutz.app.server.entity.User;
 import net.mixednutz.app.server.entity.UserProfile;
-import net.mixednutz.app.server.entity.Oembeds.Oembed;
 
 public interface ApiManager {
 	
 	public String getAvatarUri(String avatarFilename);
 
 	public <E> InternalTimelineElement toTimelineElement(E entity, User viewer);
+	
+	public <E> InternalTimelineElement toTimelineElement(E entity, User viewer, String baseUrl);
 	
 	public IUserSmall toUser(User entity);
 	

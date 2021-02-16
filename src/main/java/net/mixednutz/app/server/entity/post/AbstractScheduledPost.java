@@ -1,6 +1,8 @@
 package net.mixednutz.app.server.entity.post;
 
 import java.time.ZonedDateTime;
+import java.util.Arrays;
+import java.util.stream.Collectors;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -67,12 +69,23 @@ public abstract class AbstractScheduledPost implements ScheduledPost  {
 		this.publishDate = publishDate;
 	}
 	@Transient
-	//TODO Fix this later
 	public Long[] getExternalFeedId() {
 		return externalFeedId;
 	}
+	@Column(name="externalFeedIds")
+	public String getExternalFeedIdString() {
+		if (externalFeedId!=null) {
+			return Arrays.stream(externalFeedId).map(String::valueOf).collect(Collectors.joining(","));
+		}
+		return null;
+	}
 	public void setExternalFeedId(Long[] externalFeedId) {
 		this.externalFeedId = externalFeedId;
+	}
+	public void setExternalFeedIdString(String externalFeedIdString) {
+		if (externalFeedIdString!=null) {
+			this.externalFeedId = Arrays.stream(externalFeedIdString.split(",")).map(Long::parseLong).toArray(Long[]::new);
+		}
 	}
 	public boolean isEmailFriendGroup() {
 		return emailFriendGroup;
