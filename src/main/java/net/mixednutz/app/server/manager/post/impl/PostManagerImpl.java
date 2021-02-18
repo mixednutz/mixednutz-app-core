@@ -25,6 +25,7 @@ import net.mixednutz.app.server.entity.post.PostComment;
 import net.mixednutz.app.server.manager.ApiManager;
 import net.mixednutz.app.server.manager.post.PostManager;
 import net.mixednutz.app.server.manager.post.PostViewManager;
+import net.mixednutz.app.server.repository.GroupedPostRepository;
 import net.mixednutz.app.server.repository.PostRepository;
 
 public abstract class PostManagerImpl<P extends Post<C>, C extends PostComment, V extends AbstractPostView> 
@@ -38,7 +39,7 @@ public abstract class PostManagerImpl<P extends Post<C>, C extends PostComment, 
 	protected ApiManager apiManager;
 	
 	protected abstract InternalTimelineElement toTimelineElement(P post, User viewer);
-	
+		
 	public IPage<InternalTimelineElement,Instant> getTimelineInternal(
 			User owner, IPageRequest<String> paging) {
 			
@@ -48,15 +49,15 @@ public abstract class PostManagerImpl<P extends Post<C>, C extends PostComment, 
 					return ZonedDateTime.parse(str).toInstant();
 				});
 		if (paging.getStart()==null) {
-			contents = postRepository.getMyPostsLessThan(owner, ZonedDateTime.now(), 
+			contents = getMyPostsLessThan(owner, ZonedDateTime.now(), 
 					PageRequest.of(0, paging.getPageSize()));
 		} else {
 			ZonedDateTime start = pageRequest.getStart().atZone(ZoneId.systemDefault());
 			if (paging.getDirection()==Direction.LESS_THAN) {
-				contents = postRepository.getMyPostsLessThan(owner, start, 
+				contents = getMyPostsLessThan(owner, start, 
 						PageRequest.of(0, paging.getPageSize()));
 			} else {
-				contents = postRepository.getMyPostsGreaterThan(owner, start, 
+				contents = getMyPostsGreaterThan(owner, start, 
 						PageRequest.of(0, paging.getPageSize()));
 			}
 		}
@@ -85,17 +86,17 @@ public abstract class PostManagerImpl<P extends Post<C>, C extends PostComment, 
 					return ZonedDateTime.parse(str).toInstant();
 				});
 		if (paging.getStart()==null) {
-			contents = postRepository.getUsersPostsByDatePublishedLessThanEquals(
+			contents = getUsersPostsByDatePublishedLessThanEquals(
 					owner, viewer, ZonedDateTime.now(), 
 					PageRequest.of(0, paging.getPageSize()));
 		} else {
 			ZonedDateTime start = pageRequest.getStart().atZone(ZoneId.systemDefault());
 			if (paging.getDirection()==Direction.LESS_THAN) {
-				contents = postRepository.getUsersPostsByDatePublishedLessThanEquals(
+				contents = getUsersPostsByDatePublishedLessThanEquals(
 						owner, viewer, start, 
 						PageRequest.of(0, paging.getPageSize()));
 			} else {
-				contents = postRepository.getUsersPostsByDatePublishedGreaterThan(
+				contents = getUsersPostsByDatePublishedGreaterThan(
 						owner, viewer, start, 
 						PageRequest.of(0, paging.getPageSize()));
 			}
@@ -134,5 +135,59 @@ public abstract class PostManagerImpl<P extends Post<C>, C extends PostComment, 
 		}
 		return authorsById;
 	}	
+	
+	private List<P> getMyPostsLessThan(User owner, ZonedDateTime datePublished, 
+			PageRequest pageRequest) {
+		if (postRepository instanceof GroupedPostRepository) {
+			GroupedPostRepository groupedPostRepository = (GroupedPostRepository) postRepository;
+			List<P> results = new ArrayList<>();
+			results.addAll(groupedPostRepository.getMyEmptyGroupedPostsLessThan(owner, datePublished, 
+					pageRequest));
+			results.addAll(groupedPostRepository.getMyGroupedPostsLessThan(owner, datePublished, 
+					pageRequest));
+			return results;
+		}
+		return postRepository.getMyPostsLessThan(owner, datePublished, 
+				pageRequest);
+	}
+	
+	private List<P> getMyPostsGreaterThan(User owner, ZonedDateTime datePublished, 
+			PageRequest pageRequest) {
+		if (postRepository instanceof GroupedPostRepository) {
+			GroupedPostRepository groupedPostRepository = (GroupedPostRepository) postRepository;
+			List<P> results = new ArrayList<>();
+			results.addAll(groupedPostRepository.getMyEmptyGroupedPostsGreaterThan(owner, datePublished, 
+					pageRequest));
+			results.addAll(groupedPostRepository.getMyGroupedPostsGreaterThan(owner, datePublished, 
+					pageRequest));
+			return results;
+		}
+		return postRepository.getMyPostsGreaterThan(owner, datePublished, 
+				pageRequest);
+	}
+	
+	private List<P> getUsersPostsByDatePublishedLessThanEquals(User owner, User viewer,
+			ZonedDateTime datePublished,
+			PageRequest pageRequest) {
+		if (postRepository instanceof GroupedPostRepository) {
+			GroupedPostRepository groupedPostRepository = (GroupedPostRepository) postRepository;
+			return groupedPostRepository.getUsersGroupedPostsLessThan(owner, viewer, 
+					datePublished, pageRequest);
+		}
+		return postRepository.getUsersPostsByDatePublishedLessThanEquals(owner, 
+				viewer, datePublished, pageRequest);
+	}
+	
+	private List<P> getUsersPostsByDatePublishedGreaterThan(User owner, User viewer,
+			ZonedDateTime datePublished,
+			PageRequest pageRequest) {
+		if (postRepository instanceof GroupedPostRepository) {
+			GroupedPostRepository groupedPostRepository = (GroupedPostRepository) postRepository;
+			return groupedPostRepository.getUsersGroupedPostsGreaterThan(owner, viewer, 
+					datePublished, pageRequest);
+		}
+		return postRepository.getUsersPostsByDatePublishedGreaterThan(owner, 
+				viewer, datePublished, pageRequest);
+	}
 
 }
