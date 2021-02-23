@@ -6,6 +6,11 @@ public interface ComponentSettings {
 	
 	Map<String, ?> getSettings();
 	
+	// CSS
+	boolean css();
+	
+	String cssHref();
+	
 	// TIMELINE
 	
 	boolean includeTimelineTemplateHtmlFragment();
