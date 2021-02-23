@@ -16,9 +16,9 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
 import javax.persistence.Table;
-import javax.persistence.TableGenerator;
 import javax.persistence.Transient;
 
+import org.hibernate.annotations.GenericGenerator;
 import org.springframework.social.connect.ConnectionData;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -55,13 +55,8 @@ public class ExternalCredentials {
 
 		@Id
 		@Column(name = "cred_id")
-		@TableGenerator(
-	            name = "CREDS_GEN",
-	            table = "Creds_ID_Generator",
-	            pkColumnName = "id",
-	            valueColumnName = "sequence",
-	            allocationSize = 1)
-		@GeneratedValue(strategy = GenerationType.TABLE, generator = "CREDS_GEN")
+		@GenericGenerator(name = "system-native", strategy = "native")
+		@GeneratedValue(strategy = GenerationType.TABLE)
 		public Integer getId() {
 			return this.id;
 		}
