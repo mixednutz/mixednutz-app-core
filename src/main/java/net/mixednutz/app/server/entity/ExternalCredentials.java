@@ -35,7 +35,7 @@ public class ExternalCredentials {
 	@DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 	public static class ExternalAccountCredentials extends AbstractCredentials {
 
-		private Integer id;
+		private Long id;
 		private String type;
 		private ZonedDateTime dateCreated;
 		private ZonedDateTime dateModified;
@@ -57,11 +57,11 @@ public class ExternalCredentials {
 		@Column(name = "cred_id")
 		@GenericGenerator(name = "system-native", strategy = "native")
 		@GeneratedValue(strategy = GenerationType.TABLE)
-		public Integer getId() {
+		public Long getId() {
 			return this.id;
 		}
 
-		public void setId(Integer id) {
+		public void setId(Long id) {
 			this.id = id;
 		}
 		
