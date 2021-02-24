@@ -37,7 +37,7 @@ public class Emoji  {
 		this.sortId = sortId;
 	}
 	@Id
-	@Column(name="htmlEntity")
+	@Column(name="htmlEntity", length=12)
 	public String getId() {
 		return id;
 	}
