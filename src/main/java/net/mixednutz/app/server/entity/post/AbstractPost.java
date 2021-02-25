@@ -5,6 +5,7 @@ package net.mixednutz.app.server.entity.post;
 
 import java.time.ZonedDateTime;
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
 import javax.persistence.Column;
 import javax.persistence.ConstraintMode;
@@ -45,10 +46,14 @@ public abstract class AbstractPost<C extends AbstractPostComment> implements Pos
 	private Visibility visibility = Visibility.toAllUsers();
 		
 	boolean commentsAllowed;
+	
+	private AtomicInteger hitCount;
+	
 	/**
 	 * Note: Subclasses should create a getter for this
 	 */
 	protected List<C> comments;
+	
 	
 
 	@PrePersist
@@ -128,6 +133,17 @@ public abstract class AbstractPost<C extends AbstractPostComment> implements Pos
 		return visibility;
 	}
 
+	public Integer getHitCount() {
+		if (hitCount==null) {
+			setHitCount(null);
+		}
+		return hitCount.get();
+	}
+	
+	public void incrementHitCount() {
+		this.hitCount.incrementAndGet();
+	}
+
 	public void setDateCreated(ZonedDateTime timestamp) {
 		this.dateCreated = timestamp;
 	}
@@ -156,6 +172,10 @@ public abstract class AbstractPost<C extends AbstractPostComment> implements Pos
 		this.visibility = visibility;
 	}
 		
+	public void setHitCount(Integer hitCount) {
+		this.hitCount = new AtomicInteger(hitCount!=null?hitCount:0);
+	}
+
 	public void setCommentsAllowed(boolean commentsAllowed) {
 		this.commentsAllowed = commentsAllowed;
 	}
