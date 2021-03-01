@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import net.mixednutz.app.server.entity.Emoji;
 import net.mixednutz.app.server.entity.ReactionScore;
+import net.mixednutz.app.server.entity.ReactionsAware;
 import net.mixednutz.app.server.entity.User;
 import net.mixednutz.app.server.entity.post.AbstractReaction;
 import net.mixednutz.app.server.manager.ReactionManager;
@@ -73,6 +74,24 @@ public class ReactionManagerImpl implements ReactionManager{
 	@Override
 	public <R extends AbstractReaction> List<ReactionScore> getReactionScores(Set<R> reactions, User author, User currentUser) {
 		Map<Emoji, ReactionScore> reactionScores = new HashMap<Emoji, ReactionScore>();
+		getReactionScores(reactionScores, reactions, author, currentUser);
+		List<ReactionScore> list = new ArrayList<ReactionScore>(reactionScores.values());
+		Collections.sort(list);
+		return list;
+	}
+	
+	public <R extends AbstractReaction> List<ReactionScore> rollupReactionScores(Iterable<? extends ReactionsAware<R>> iterableOfReactions, User author, User currentUser) {
+		Map<Emoji, ReactionScore> reactionScores = new HashMap<Emoji, ReactionScore>();
+		for (ReactionsAware<R> reactionAware: iterableOfReactions) {
+			getReactionScores(reactionScores, reactionAware.getReactions(), author, currentUser);
+		}
+
+		List<ReactionScore> list = new ArrayList<ReactionScore>(reactionScores.values());
+		Collections.sort(list);
+		return list;
+	}
+	
+	public <R extends AbstractReaction> void getReactionScores(Map<Emoji, ReactionScore> reactionScores, Set<R> reactions, User author, User currentUser) {
 		for (R reaction : reactions) {
 			if (!reactionScores.containsKey(reaction.getEmoji())) {
 				reactionScores.put(reaction.getEmoji(), new ReactionScore(reaction.getEmoji()));
@@ -84,9 +103,6 @@ public class ReactionManagerImpl implements ReactionManager{
 				reactionScore.incrementScore();
 			}
 		}
-		List<ReactionScore> list = new ArrayList<ReactionScore>(reactionScores.values());
-		Collections.sort(list);
-		return list;
 	}
 	
 	/**

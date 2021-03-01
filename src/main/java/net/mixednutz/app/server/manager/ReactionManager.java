@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Set;
 
 import net.mixednutz.app.server.entity.ReactionScore;
+import net.mixednutz.app.server.entity.ReactionsAware;
 import net.mixednutz.app.server.entity.User;
 import net.mixednutz.app.server.entity.post.AbstractReaction;
 
@@ -48,6 +49,8 @@ public interface ReactionManager {
 			User author, User currentUser, NewReactionCallback<R> callback);
 		
 	public <R extends AbstractReaction> List<ReactionScore> getReactionScores(Set<R> reactions, User author, User currentUser);
+	
+	public <R extends AbstractReaction> List<ReactionScore> rollupReactionScores(Iterable<? extends ReactionsAware<R>> iterableOfReactions, User author, User currentUser);
 	
 	interface NewReactionCallback<R extends AbstractReaction> {
 		R createReaction(String emojiId);
