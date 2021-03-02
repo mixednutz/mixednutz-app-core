@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.function.Function;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -38,7 +39,7 @@ public class ReactionManagerImpl implements ReactionManager{
 					
 	@Override
 	public <R extends AbstractReaction> Collection<R> addReaction(String emojiId, Set<R> reactions, User author,
-			User currentUser, NewReactionCallback<R> callback) {
+			User currentUser, Function<String, R> callback) {
 		List<R> addedReactions = new ArrayList<R>();
 		AbstractReaction existingReaction = null;
 		for (AbstractReaction reaction: reactions) {
@@ -49,7 +50,7 @@ public class ReactionManagerImpl implements ReactionManager{
 			}
 		}
 		if (existingReaction==null) {
-			final R newreaction = callback.createReaction(emojiId);
+			final R newreaction = callback.apply(emojiId);
 			reactions.add(newreaction);
 			addedReactions.add(newreaction);
 		}
@@ -58,7 +59,7 @@ public class ReactionManagerImpl implements ReactionManager{
 
 	@Override
 	public <R extends AbstractReaction> R toggleReaction(String emojiId, Set<R> reactions, User author, User currentUser,
-			NewReactionCallback<R> callback) {
+			Function<String, R> callback) {
 		for (AbstractReaction reaction: reactions) {
 			if (reaction.getEmoji().getId().equals(emojiId)
 					&& userOwnsReaction(reaction, author, currentUser)) {
@@ -66,7 +67,7 @@ public class ReactionManagerImpl implements ReactionManager{
 				return null;
 			}
 		}
-		R addedReaction = callback.createReaction(emojiId);
+		R addedReaction = callback.apply(emojiId);
 		reactions.add(addedReaction);
 		return addedReaction;
 	}
