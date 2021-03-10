@@ -4,6 +4,7 @@ import static net.mixednutz.app.server.entity.ExternalCredentials.Oauth1Credenti
 import static net.mixednutz.app.server.entity.ExternalCredentials.Oauth2Credentials.OAUTH2;
 
 import java.time.ZonedDateTime;
+import java.util.Map;
 
 import javax.persistence.Column;
 import javax.persistence.DiscriminatorColumn;
@@ -53,6 +54,7 @@ public class ExternalFeeds {
 		private String lastCrawledHomeTimelineKey; //used for seek pagination
 		private String lastCrawledUserTimelineKey; //used for seek pagination
 		private VisibilityType visibility = VisibilityType.PRIVATE; //Default to private
+		private Map<String, Object> referenceData;
 
 		public AbstractFeed() {
 			super();
@@ -199,6 +201,15 @@ public class ExternalFeeds {
 
 		public void setVisibility(VisibilityType visibility) {
 			this.visibility = visibility;
+		}
+
+		@Transient
+		public Map<String, Object> getReferenceData() {
+			return referenceData;
+		}
+
+		public void setReferenceData(Map<String, Object> referenceData) {
+			this.referenceData = referenceData;
 		}
 
 		@PrePersist

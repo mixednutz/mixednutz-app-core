@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+
 import net.mixednutz.api.model.INetworkInfoSmall;
 import net.mixednutz.api.model.IPage;
 import net.mixednutz.api.model.IPageRequest;
@@ -114,7 +116,11 @@ public interface ExternalFeedManager {
 	 */
 	public <P extends IPost> void post(AbstractFeed feed, P post);
 	
-	public void crosspost(AbstractFeed feed, String text, String url, String[] tags);
+	public void crosspost(AbstractFeed feed, String text, String url, String[] tags, HttpServletRequest request);
+	
+	public void crosspost(AbstractFeed feed, String text, String url, String[] tags, Map<String,Object> additionalValues);
+	
+	public Map<String, Object> referenceData(AbstractFeed feed);
 		
 	public Map<INetworkInfoSmall, Collection<String>> getCompatibleFeedsForCrossposting();
 	
