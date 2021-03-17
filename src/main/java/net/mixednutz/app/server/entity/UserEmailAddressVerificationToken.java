@@ -9,7 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 
-@Entity
+//@Entity
 public class UserEmailAddressVerificationToken {
 	
 	private static final int EXPIRATION = 60 * 24;

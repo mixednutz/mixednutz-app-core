@@ -12,7 +12,7 @@ import javax.persistence.PrimaryKeyJoinColumn;
 
 import org.hibernate.annotations.GenericGenerator;
 
-@Entity
+//@Entity
 public class UserEmailAddress {
 	
 	private Long id;

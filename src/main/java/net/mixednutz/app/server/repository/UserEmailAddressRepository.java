@@ -8,8 +8,10 @@ import org.springframework.stereotype.Repository;
 import net.mixednutz.app.server.entity.User;
 import net.mixednutz.app.server.entity.UserEmailAddress;
 
-@Repository
-public interface UserEmailAddressRepository extends CrudRepository<UserEmailAddress, Long> {
+//@Repository
+public interface UserEmailAddressRepository 
+//extends CrudRepository<UserEmailAddress, Long> 
+{
 
 	Optional<UserEmailAddress> findByUser(User user);
 	
