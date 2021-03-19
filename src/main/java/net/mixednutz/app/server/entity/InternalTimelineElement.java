@@ -69,9 +69,19 @@ public class InternalTimelineElement implements ITimelineElement {
 	private String title;
 	
 	/**
+	 * Optional latest subtitle for grouped posts that have titles
+	 */
+	private String latestSubtitle;
+	
+	/**
 	 * Optional short description (may be truncated)
 	 */
 	private String description;
+	
+	/**
+	 * Optional short sub-description (may be truncated) for grouped posts that have descriptions
+	 */
+	private String latestSubdescription;
 
 	/**
 	 * Optional Alternate data.
@@ -196,6 +206,14 @@ public class InternalTimelineElement implements ITimelineElement {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	
+	public String getLatestSubtitle() {
+		return latestSubtitle;
+	}
+
+	public void setLatestSubtitle(String latestSubtitle) {
+		this.latestSubtitle = latestSubtitle;
+	}
 
 	public String getDescription() {
 		return description;
@@ -203,6 +221,14 @@ public class InternalTimelineElement implements ITimelineElement {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getLatestSubdescription() {
+		return latestSubdescription;
+	}
+
+	public void setLatestSubdescription(String latestSubdescription) {
+		this.latestSubdescription = latestSubdescription;
 	}
 
 	public Collection<AlternateLink> getAlternateLinks() {

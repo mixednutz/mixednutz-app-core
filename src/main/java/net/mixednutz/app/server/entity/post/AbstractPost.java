@@ -34,6 +34,7 @@ import net.mixednutz.app.server.entity.Visibility;
 public abstract class AbstractPost<C extends AbstractPostComment> implements Post<C> {
 			
 	private int hashCode = Integer.MIN_VALUE;
+	private static final int DESCRIPTION_LENGTH = 511;
 	
 	private Long id;
 	private String description;
@@ -76,7 +77,7 @@ public abstract class AbstractPost<C extends AbstractPostComment> implements Pos
 	}
 
 	@Lob
-	@Column(name="description")
+	@Column(name="description", length=DESCRIPTION_LENGTH)
 //	@Column(name="description", columnDefinition="LONGTEXT")
 	public String getDescription() {
 		return description;
