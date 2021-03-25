@@ -19,6 +19,7 @@ public class UserEmailAddress {
 	private User user;
 	private ZonedDateTime dateCreated;
 	private String emailAddress;
+	private String displayName;
 	private boolean verified;
 	private boolean primary;
 		
@@ -74,6 +75,14 @@ public class UserEmailAddress {
 
 	public void setPrimary(boolean primary) {
 		this.primary = primary;
+	}
+
+	public String getDisplayName() {
+		return displayName;
+	}
+
+	public void setDisplayName(String displayName) {
+		this.displayName = displayName;
 	}
 
 }
