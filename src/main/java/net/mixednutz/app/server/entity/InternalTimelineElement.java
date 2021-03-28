@@ -32,6 +32,12 @@ public class InternalTimelineElement implements ITimelineElement {
 	 * @return
 	 */
 	private String url;
+	
+	/**
+	 * Optional latest sub url for grouped posts
+	 * @return
+	 */
+	private String latestSuburl;
 		
 	/**
 	 * Possible additional actions (outside of normal CRUD actions) that can be performed
@@ -149,6 +155,14 @@ public class InternalTimelineElement implements ITimelineElement {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	
+	public String getLatestSuburl() {
+		return latestSuburl;
+	}
+
+	public void setLatestSuburl(String suburl) {
+		this.latestSuburl = suburl;
 	}
 
 	public List<Action> getActions() {
