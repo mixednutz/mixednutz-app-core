@@ -9,7 +9,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 
-//@Entity
+@Entity
 public class UserEmailAddressVerificationToken {
 	
 	private static final int EXPIRATION = 60 * 24;
@@ -68,9 +68,9 @@ public class UserEmailAddressVerificationToken {
 	}
 
 	private ZonedDateTime calculateExpiryDate(int expiryTimeInMinutes) {
-		ZonedDateTime time = ZonedDateTime.now();
-		time.plusMinutes(expiryTimeInMinutes);
-		return time;
+		return ZonedDateTime
+				.now()
+				.plusMinutes(expiryTimeInMinutes);
 	}
 		
 }

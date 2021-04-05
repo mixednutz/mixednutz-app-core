@@ -5,9 +5,7 @@ import org.springframework.stereotype.Repository;
 
 import net.mixednutz.app.server.entity.UserEmailAddressVerificationToken;
 
-//@Repository
-public interface UserEmailAddressVerificationTokenRepository 
-//extends CrudRepository<UserEmailAddressVerificationToken, String> 
-{
+@Repository
+public interface UserEmailAddressVerificationTokenRepository extends CrudRepository<UserEmailAddressVerificationToken, String> {
 
 }
