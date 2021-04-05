@@ -4,11 +4,10 @@ import java.time.ZonedDateTime;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.OneToOne;
-import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 
 import org.hibernate.annotations.GenericGenerator;
 
@@ -17,6 +16,7 @@ public class UserEmailAddress {
 	
 	private Long id;
 	private User user;
+	private Long userId;
 	private ZonedDateTime dateCreated;
 	private String emailAddress;
 	private String displayName;
@@ -31,10 +31,15 @@ public class UserEmailAddress {
 		return id;
 	}
 
-	@OneToOne(fetch=FetchType.LAZY)
-	@PrimaryKeyJoinColumn(name="user_id")
+	@ManyToOne()
+	@JoinColumn(name="user_id", insertable=false, updatable=false)
 	public User getUser() {
 		return user;
+	}
+	
+	@Column(name="user_id", insertable=true, updatable=false)
+	public Long getUserId() {
+		return userId;
 	}
 
 	public String getEmailAddress() {
@@ -45,6 +50,7 @@ public class UserEmailAddress {
 		this.emailAddress = emailAddress;
 	}
 
+	@Column(name="email_verified")
 	public boolean isVerified() {
 		return verified;
 	}
@@ -55,6 +61,10 @@ public class UserEmailAddress {
 
 	public void setUser(User user) {
 		this.user = user;
+	}
+
+	public void setUserId(Long userId) {
+		this.userId = userId;
 	}
 
 	public void setId(Long id) {
@@ -69,6 +79,7 @@ public class UserEmailAddress {
 		this.dateCreated = dateCreated;
 	}
 
+	@Column(name="primary_email")
 	public boolean isPrimary() {
 		return primary;
 	}

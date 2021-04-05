@@ -68,9 +68,9 @@ public class UserEmailAddressVerificationToken {
 	}
 
 	private ZonedDateTime calculateExpiryDate(int expiryTimeInMinutes) {
-		ZonedDateTime time = ZonedDateTime.now();
-		time.plusMinutes(expiryTimeInMinutes);
-		return time;
+		return ZonedDateTime
+				.now()
+				.plusMinutes(expiryTimeInMinutes);
 	}
 		
 }
