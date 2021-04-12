@@ -11,6 +11,8 @@ import net.mixednutz.app.server.entity.UserEmailAddress;
 @Repository
 public interface UserEmailAddressRepository extends CrudRepository<UserEmailAddress, Long> {
 
-	Optional<UserEmailAddress> findByUser(User user);
+	Iterable<UserEmailAddress> findByUser(User user);
+	
+	Optional<UserEmailAddress> findByUserAndPrimaryTrue(User user);
 	
 }
