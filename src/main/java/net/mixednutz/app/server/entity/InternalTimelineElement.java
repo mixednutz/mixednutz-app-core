@@ -2,7 +2,9 @@ package net.mixednutz.app.server.entity;
 
 import java.time.ZonedDateTime;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.mixednutz.api.core.model.Action;
 import net.mixednutz.api.core.model.AlternateLink;
@@ -113,6 +115,8 @@ public class InternalTimelineElement implements ITimelineElement {
 	 * Optional list of comments about this element
 	 */
 	private List<InternalTimelineElement> comments;
+	
+	private Map<String, Object> additionalData;
 	
 	public InternalTimelineElement() {
 		super();
@@ -283,6 +287,17 @@ public class InternalTimelineElement implements ITimelineElement {
 
 	public void setComments(List<InternalTimelineElement> comments) {
 		this.comments = comments;
+	}
+
+	public Map<String, Object> getAdditionalData() {
+		if (additionalData==null) {
+			additionalData = new HashMap<>();
+		}
+		return additionalData;
+	}
+
+	public void setAdditionalData(Map<String, Object> additionalData) {
+		this.additionalData = additionalData;
 	}
 
 

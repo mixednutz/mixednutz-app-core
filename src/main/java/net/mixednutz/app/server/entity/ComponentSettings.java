@@ -17,6 +17,10 @@ public interface ComponentSettings {
 	
 	String includeTimelineTemplateHtmlFragmentName();
 	
+	boolean includeTimelineTemplateScriptFragment();
+	
+	String includeTimelineTemplateScriptFragmentName();
+	
 	//SETTINGS
 	
 	boolean includeHtmlFragment();
