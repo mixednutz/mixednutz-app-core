@@ -3,6 +3,7 @@ package net.mixednutz.app.server.manager;
 import net.mixednutz.api.core.model.Notification;
 import net.mixednutz.app.server.entity.User;
 import net.mixednutz.app.server.entity.post.AbstractCommentNotification;
+import net.mixednutz.app.server.entity.post.AbstractCommentReplyNotification;
 import net.mixednutz.app.server.entity.post.AbstractPostComment;
 import net.mixednutz.app.server.entity.post.AbstractReactionNotification;
 import net.mixednutz.app.server.entity.post.GroupedPosts;
@@ -15,8 +16,6 @@ public interface NotificationManager {
 	
 	<P extends Post<C>, C extends PostComment> 
 		void notifyNewComment(P replyTo, C comment);
-	
-	void notifyNewCommentReply(AbstractPostComment replyTo, AbstractPostComment comment);
 	
 	<P extends Post<C>, C extends PostComment, R extends PostReaction> 
 		void notifyNewReaction(P reactedTo, R reaction);
@@ -40,6 +39,8 @@ public interface NotificationManager {
 		PostNotification createReactionNotification(P reactedTo, R reaction);
 		
 		Iterable<? extends AbstractCommentNotification<P,C>> lookupCommentNotifications(User user, P post);
+		
+		Iterable<? extends AbstractCommentReplyNotification<? extends AbstractPostComment>> lookupCommentReplyNotifications(User user, P post);
 		
 		Iterable<? extends AbstractReactionNotification<P,C,R>> lookupReactionNotifications(User user, P reactedTo);
 	}
