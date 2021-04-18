@@ -17,8 +17,6 @@ public interface NotificationManager {
 	<P extends Post<C>, C extends PostComment> 
 		void notifyNewComment(P replyTo, C comment);
 	
-	void notifyNewCommentReply(AbstractPostComment replyTo, AbstractPostComment comment);
-	
 	<P extends Post<C>, C extends PostComment, R extends PostReaction> 
 		void notifyNewReaction(P reactedTo, R reaction);
 	
