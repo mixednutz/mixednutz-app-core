@@ -15,7 +15,7 @@ public interface ApiElementConverter<Entity> {
 	
 	Oembeds.Oembed toOembed(
 			String path, Integer maxwidth, Integer maxheight, String format, 
-			Authentication auth);
+			Authentication auth, String baseUrl);
 	
 	boolean canConvertOembed(String path);
 	

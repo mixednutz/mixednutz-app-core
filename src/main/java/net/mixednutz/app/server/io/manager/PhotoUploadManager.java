@@ -9,6 +9,31 @@ import net.mixednutz.app.server.io.domain.PersistableFile;
 
 public interface PhotoUploadManager {
 	
+	public enum Size {
+		
+		ORIGINAL(),
+		LARGE(),
+		SMALL(),
+		TINY(),
+		AVATAR(),
+		BOOK();
+		
+		final String size;
+		
+		private Size() {
+			this.size = this.name().toLowerCase();
+		}
+
+		public String getSize() {
+			return size;
+		}
+		
+		public static Size getValue(String size) {
+			return Size.valueOf(size.toUpperCase());
+		}
+
+	}
+	
 	/**
 	 * Uploads a PersistableFile to the local photos directory and also the cloud.
 	 * Use this method when you have a stream and a known content type.
@@ -20,7 +45,7 @@ public interface PhotoUploadManager {
 	 */
 	public String uploadFile(User user, PersistableFile file) throws IOException;
 	
-	public String uploadFile(User user, PersistableFile file, String size) throws IOException;
+	public String uploadFile(User user, PersistableFile file, Size size) throws IOException;
 	
 	/**
 	 * Uploads a file to the local photos directory and also the cloud.
@@ -33,7 +58,7 @@ public interface PhotoUploadManager {
 	 */
 	public String uploadFile(User user, File file) throws IOException;
 	
-	public String uploadFile(User user, File file, String size) throws IOException;
+	public String uploadFile(User user, File file, Size size) throws IOException;
 	
 	/**
 	 * Uploads a file to the local photos directory and also the cloud.
@@ -54,10 +79,10 @@ public interface PhotoUploadManager {
 	 * 
 	 * @param account
 	 * @param filename
-	 * @param sizeName
+	 * @param size
 	 * @return
 	 * @throws IOException 
 	 */
-	public FileWrapper downloadFile(User user, String filename, String sizeName) throws IOException;
+	public FileWrapper downloadFile(User user, String filename, Size sizeName) throws IOException;
 	
 }
