@@ -42,6 +42,7 @@ public class UserEmailAddress {
 		return userId;
 	}
 
+	@Column(unique=true)
 	public String getEmailAddress() {
 		return emailAddress;
 	}

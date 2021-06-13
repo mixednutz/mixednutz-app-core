@@ -10,20 +10,18 @@ import javax.persistence.ManyToOne;
 import javax.persistence.PrePersist;
 
 @Entity
-public class UserEmailAddressVerificationToken implements VerificationToken {
-	
-	private static final int EXPIRATION = 60 * 24;
+public class ResetPasswordToken implements VerificationToken {
 
 	private String token;
 	private UserEmailAddress emailAddress;
+	private User user;
 	private ZonedDateTime dateCreated;
-	private ZonedDateTime expiryDate;
+	private boolean expired;
 	private ZonedDateTime viewedOn;
 	
 	@PrePersist
 	public void onPersist() {
 		this.dateCreated=ZonedDateTime.now();
-		this.expiryDate = this.calculateExpiryDate(EXPIRATION);
 	}
 	
 	@Id
@@ -34,7 +32,7 @@ public class UserEmailAddressVerificationToken implements VerificationToken {
 	public void setToken(String token) {
 		this.token = token;
 	}
-	@ManyToOne()
+	@ManyToOne(optional=true)
 	@JoinColumn(name="email_adddress_id")
 	public UserEmailAddress getEmailAddress() {
 		return emailAddress;
@@ -42,7 +40,15 @@ public class UserEmailAddressVerificationToken implements VerificationToken {
 	public void setEmailAddress(UserEmailAddress emailAddress) {
 		this.emailAddress = emailAddress;
 	}
-		
+	@ManyToOne()
+	@JoinColumn(name="user_id")
+	public User getUser() {
+		return user;
+	}
+	public void setUser(User user) {
+		this.user = user;
+	}
+
 	public ZonedDateTime getDateCreated() {
 		return dateCreated;
 	}
@@ -51,12 +57,12 @@ public class UserEmailAddressVerificationToken implements VerificationToken {
 		this.dateCreated = dateCreated;
 	}
 
-	public ZonedDateTime getExpiryDate() {
-		return expiryDate;
+	public boolean isExpired() {
+		return expired;
 	}
 
-	public void setExpiryDate(ZonedDateTime expiryDate) {
-		this.expiryDate = expiryDate;
+	public void setExpired(boolean expired) {
+		this.expired = expired;
 	}
 
 	public ZonedDateTime getViewedOn() {
@@ -66,11 +72,5 @@ public class UserEmailAddressVerificationToken implements VerificationToken {
 	public void setViewedOn(ZonedDateTime viewedOn) {
 		this.viewedOn = viewedOn;
 	}
-
-	private ZonedDateTime calculateExpiryDate(int expiryTimeInMinutes) {
-		return ZonedDateTime
-				.now()
-				.plusMinutes(expiryTimeInMinutes);
-	}
-		
+	
 }
