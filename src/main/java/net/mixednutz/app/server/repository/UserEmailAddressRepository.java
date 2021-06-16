@@ -15,4 +15,6 @@ public interface UserEmailAddressRepository extends CrudRepository<UserEmailAddr
 	
 	Optional<UserEmailAddress> findByUserAndPrimaryTrue(User user);
 	
+	Optional<UserEmailAddress> findByEmailAddress(String emailAddress);
+	
 }

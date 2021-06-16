@@ -79,7 +79,8 @@ public class User extends BaseUserDetails {
 	@Override
 	@Column(name="username",
 		length=50,
-		nullable=false)
+		nullable=false, 
+		unique=true)
 	public String getUsername() {
 		return super.getUsername();
 	}
