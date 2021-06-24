@@ -14,6 +14,7 @@ import net.mixednutz.api.model.IPageRequest;
 import net.mixednutz.api.model.IPost;
 import net.mixednutz.api.model.ITimelineElement;
 import net.mixednutz.app.server.entity.ExternalFeeds.AbstractFeed;
+import net.mixednutz.app.server.entity.ExternalFeedContent;
 import net.mixednutz.app.server.entity.User;
 
 public interface ExternalFeedManager {
@@ -114,11 +115,11 @@ public interface ExternalFeedManager {
 	 * @param feed
 	 * @param post
 	 */
-	public <P extends IPost> void post(AbstractFeed feed, P post);
+	public <P extends IPost> ITimelineElement post(AbstractFeed feed, P post);
 	
-	public void crosspost(AbstractFeed feed, String text, String url, String[] tags, HttpServletRequest request);
+	public Optional<ExternalFeedContent> crosspost(AbstractFeed feed, String text, String url, String[] tags, HttpServletRequest request);
 	
-	public void crosspost(AbstractFeed feed, String text, String url, String[] tags, Map<String,Object> additionalValues);
+	public Optional<ExternalFeedContent> crosspost(AbstractFeed feed, String text, String url, String[] tags, Map<String,Object> additionalValues);
 	
 	public Map<String, Object> referenceData(AbstractFeed feed);
 		
