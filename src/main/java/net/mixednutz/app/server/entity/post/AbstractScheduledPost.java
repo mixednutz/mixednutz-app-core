@@ -46,6 +46,7 @@ public abstract class AbstractScheduledPost implements ScheduledPost  {
 	private Boolean published=false;
 	
 	public abstract Post<?> post();
+	public abstract Post<?> inReplyTo();
 	
 	public AbstractScheduledPost(String type) {
 		super();
