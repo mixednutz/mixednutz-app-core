@@ -2,7 +2,9 @@ package net.mixednutz.app.server.entity;
 
 import java.time.ZonedDateTime;
 import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import net.mixednutz.api.core.model.Action;
 import net.mixednutz.api.core.model.AlternateLink;
@@ -32,6 +34,12 @@ public class InternalTimelineElement implements ITimelineElement {
 	 * @return
 	 */
 	private String url;
+	
+	/**
+	 * Optional latest sub url for grouped posts
+	 * @return
+	 */
+	private String latestSuburl;
 		
 	/**
 	 * Possible additional actions (outside of normal CRUD actions) that can be performed
@@ -69,9 +77,19 @@ public class InternalTimelineElement implements ITimelineElement {
 	private String title;
 	
 	/**
+	 * Optional latest subtitle for grouped posts that have titles
+	 */
+	private String latestSubtitle;
+	
+	/**
 	 * Optional short description (may be truncated)
 	 */
 	private String description;
+	
+	/**
+	 * Optional short sub-description (may be truncated) for grouped posts that have descriptions
+	 */
+	private String latestSubdescription;
 
 	/**
 	 * Optional Alternate data.
@@ -97,6 +115,8 @@ public class InternalTimelineElement implements ITimelineElement {
 	 * Optional list of comments about this element
 	 */
 	private List<InternalTimelineElement> comments;
+	
+	private Map<String, Object> additionalData;
 	
 	public InternalTimelineElement() {
 		super();
@@ -139,6 +159,14 @@ public class InternalTimelineElement implements ITimelineElement {
 
 	public void setUrl(String url) {
 		this.url = url;
+	}
+	
+	public String getLatestSuburl() {
+		return latestSuburl;
+	}
+
+	public void setLatestSuburl(String suburl) {
+		this.latestSuburl = suburl;
 	}
 
 	public List<Action> getActions() {
@@ -196,6 +224,14 @@ public class InternalTimelineElement implements ITimelineElement {
 	public void setTitle(String title) {
 		this.title = title;
 	}
+	
+	public String getLatestSubtitle() {
+		return latestSubtitle;
+	}
+
+	public void setLatestSubtitle(String latestSubtitle) {
+		this.latestSubtitle = latestSubtitle;
+	}
 
 	public String getDescription() {
 		return description;
@@ -203,6 +239,14 @@ public class InternalTimelineElement implements ITimelineElement {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	public String getLatestSubdescription() {
+		return latestSubdescription;
+	}
+
+	public void setLatestSubdescription(String latestSubdescription) {
+		this.latestSubdescription = latestSubdescription;
 	}
 
 	public Collection<AlternateLink> getAlternateLinks() {
@@ -243,6 +287,17 @@ public class InternalTimelineElement implements ITimelineElement {
 
 	public void setComments(List<InternalTimelineElement> comments) {
 		this.comments = comments;
+	}
+
+	public Map<String, Object> getAdditionalData() {
+		if (additionalData==null) {
+			additionalData = new HashMap<>();
+		}
+		return additionalData;
+	}
+
+	public void setAdditionalData(Map<String, Object> additionalData) {
+		this.additionalData = additionalData;
 	}
 
 

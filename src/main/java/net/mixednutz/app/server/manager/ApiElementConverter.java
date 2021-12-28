@@ -9,13 +9,13 @@ import net.mixednutz.app.server.entity.User;
 public interface ApiElementConverter<Entity> {
 
 	InternalTimelineElement toTimelineElement(
-			InternalTimelineElement element, Entity entity, User viewer);
+			InternalTimelineElement element, Entity entity, User viewer, String baseUrl);
 		
 	boolean canConvert(Class<?> entityClazz);
 	
 	Oembeds.Oembed toOembed(
 			String path, Integer maxwidth, Integer maxheight, String format, 
-			Authentication auth);
+			Authentication auth, String baseUrl);
 	
 	boolean canConvertOembed(String path);
 	

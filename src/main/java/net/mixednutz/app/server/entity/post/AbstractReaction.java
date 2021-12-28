@@ -24,6 +24,7 @@ import org.hibernate.annotations.NotFoundAction;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.fasterxml.jackson.annotation.JsonTypeInfo.As;
 
@@ -120,12 +121,18 @@ public abstract class AbstractReaction implements PostReaction {
 	@JoinColumn(name="reactor_id", insertable=false, updatable=false,
 		foreignKey=@ForeignKey(ConstraintMode.NO_CONSTRAINT))
 	@NotFound(action=NotFoundAction.IGNORE)
+	@JsonIgnore
 	public User getReactor() {
 		return reactor;
 	}
 
 	public void setReactor(User reactor) {
 		this.reactor = reactor;
+	}
+	
+	@Transient
+	public String getReactorUsername() {
+		return reactor!=null?reactor.getUsername():null;
 	}
 
 	@Column(name="emoji_code", insertable=true, updatable=false)

@@ -6,11 +6,14 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+
 import net.mixednutz.api.model.INetworkInfoSmall;
 import net.mixednutz.api.model.IPage;
 import net.mixednutz.api.model.IPageRequest;
 import net.mixednutz.api.model.IPost;
 import net.mixednutz.api.model.ITimelineElement;
+import net.mixednutz.app.server.entity.ExternalFeedContent;
 import net.mixednutz.app.server.entity.ExternalFeeds.AbstractFeed;
 import net.mixednutz.app.server.entity.User;
 
@@ -112,9 +115,13 @@ public interface ExternalFeedManager {
 	 * @param feed
 	 * @param post
 	 */
-	public <P extends IPost> void post(AbstractFeed feed, P post);
+	public <P extends IPost> ITimelineElement post(AbstractFeed feed, P post);
 	
-	public void crosspost(AbstractFeed feed, String text, String url, String[] tags);
+	public Optional<ExternalFeedContent> crosspost(AbstractFeed feed, String text, String url, String[] tags, ExternalFeedContent inReplyTo, HttpServletRequest request);
+	
+	public Optional<ExternalFeedContent> crosspost(AbstractFeed feed, String text, String url, String[] tags, ExternalFeedContent inReplyTo, Map<String,Object> additionalValues);
+	
+	public Map<String, Object> referenceData(AbstractFeed feed);
 		
 	public Map<INetworkInfoSmall, Collection<String>> getCompatibleFeedsForCrossposting();
 	

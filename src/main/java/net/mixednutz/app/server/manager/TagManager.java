@@ -6,6 +6,7 @@ package net.mixednutz.app.server.manager;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Function;
 
 import net.mixednutz.app.server.entity.TagScore;
 import net.mixednutz.app.server.entity.TagsAware;
@@ -37,7 +38,7 @@ public interface TagManager  {
 	 * @param callback
 	 */
 	public <T extends AbstractTag> void mergeTags(String[] tagArray, 
-			Set<T> tags, NewTagCallback<T> callback);
+			Set<T> tags, Function<String, T> callback);
 	
 	/**
 	 * Adds a tagArray to a set of tags
@@ -50,7 +51,7 @@ public interface TagManager  {
 	 * @return 
 	 */
 	public <T extends AbstractTag> Collection<T> addTags(String[] tagArray, Set<T> tags, 
-			User author, User currentUser, NewTagCallback<T> callback);
+			User author, User currentUser, Function<String, T> callback);
 	
 	/**
 	 * Toggle Tag.  Either adds a tag, or removes it.  Returns the added tag or
@@ -64,7 +65,7 @@ public interface TagManager  {
 	 * @return
 	 */
 	public <T extends AbstractTag> T toggleTag(String tagString, Set<T> tags, 
-			User author, User currentUser, NewTagCallback<T> callback);
+			User author, User currentUser, Function<String, T> callback);
 		
 	public <T extends AbstractTag> List<TagScore> getTagScores(Set<T> tags, User author, User currentUser);
 	
@@ -78,7 +79,4 @@ public interface TagManager  {
 	 */
 	public <P extends TagsAware<T>, T extends AbstractTag> List<TagScore> getTagScores(Set<P> posts);
 	
-	interface NewTagCallback<T extends AbstractTag> {
-		T createTag(String tagString);
-	}
 }

@@ -32,6 +32,8 @@ public class UserProfile implements IUserProfile {
 	private Integer twitterAccountId;
 	private Oauth1AuthenticatedFeed twitterAccount;
 	
+	private String deviantArtUsername;
+	
 
 	@Id
 	@Column(name="user_id", nullable = false, updatable=false)
@@ -114,6 +116,14 @@ public class UserProfile implements IUserProfile {
 
 	public void setTwitterAccount(Oauth1AuthenticatedFeed twitterAccount) {
 		this.twitterAccount = twitterAccount;
+	}
+
+	public String getDeviantArtUsername() {
+		return deviantArtUsername;
+	}
+
+	public void setDeviantArtUsername(String deviantArtUsername) {
+		this.deviantArtUsername = deviantArtUsername;
 	}
 
 }

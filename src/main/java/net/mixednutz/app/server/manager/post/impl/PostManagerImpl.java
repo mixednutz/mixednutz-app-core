@@ -12,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
 import net.mixednutz.api.core.model.PageBuilder;
-import net.mixednutz.api.core.model.PageBuilder.GetTokenCallback;
 import net.mixednutz.api.model.IPage;
 import net.mixednutz.api.model.IPageRequest;
 import net.mixednutz.api.model.IPageRequest.Direction;
@@ -69,11 +68,7 @@ public abstract class PostManagerImpl<P extends Post<C>, C extends PostComment, 
 		return new PageBuilder<InternalTimelineElement, Instant>()
 			.setItems(elements)
 			.setPageRequest(pageRequest)
-			.setTokenCallback(new GetTokenCallback<InternalTimelineElement, Instant>(){
-				@Override
-				public Instant getToken(InternalTimelineElement item) {
-					return item.getPostedOnDate().toInstant();
-				}})
+			.setTokenCallback((item)->item.getPostedOnDate().toInstant())
 			.build();
 	}
 	
@@ -109,11 +104,7 @@ public abstract class PostManagerImpl<P extends Post<C>, C extends PostComment, 
 		return new PageBuilder<InternalTimelineElement, Instant>()
 			.setItems(elements)
 			.setPageRequest(pageRequest)
-			.setTokenCallback(new GetTokenCallback<InternalTimelineElement, Instant>(){
-				@Override
-				public Instant getToken(InternalTimelineElement item) {
-					return item.getPostedOnDate().toInstant();
-				}})
+			.setTokenCallback((item)->item.getPostedOnDate().toInstant())
 			.build();
 	}
 	
