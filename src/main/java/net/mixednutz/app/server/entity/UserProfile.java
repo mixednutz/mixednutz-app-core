@@ -1,5 +1,6 @@
 package net.mixednutz.app.server.entity;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -35,13 +36,23 @@ public class UserProfile implements IUserProfile {
 	private String deviantArtUsername;
 	
 
+	public UserProfile() {
+		super();
+	}
+	
+	public UserProfile(User user) {
+		super();
+		//this.user = user; latest hibernate doesn't like this
+		this.userId = user.getUserId();
+	}
+
 	@Id
 	@Column(name="user_id", nullable = false, updatable=false)
 	public Long getUserId() {
 		return userId;
 	}
 
-	@OneToOne(fetch=FetchType.LAZY)
+	@OneToOne(fetch=FetchType.LAZY, cascade = CascadeType.MERGE)
 	@PrimaryKeyJoinColumn(name="user_id")
 	public User getUser() {
 		return user;
