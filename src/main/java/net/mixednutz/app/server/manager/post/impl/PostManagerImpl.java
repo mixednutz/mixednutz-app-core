@@ -151,8 +151,7 @@ public abstract class PostManagerImpl<P extends AbstractPost<C>, C extends Abstr
 			//TODO
 			break;
 		case SELECT_FOLLOWERS:
-			//TODO
-			break;
+			return post.getVisibility().getSelectFollowers().contains(user);
 		case PRIVATE:
 			return (user.equals(post.getAuthor())||user.equals(post.getOwner()));
 		case ALL_USERS:
