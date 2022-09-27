@@ -18,16 +18,16 @@ import net.mixednutz.api.model.IPageRequest.Direction;
 import net.mixednutz.api.model.ITimelineElement;
 import net.mixednutz.app.server.entity.InternalTimelineElement;
 import net.mixednutz.app.server.entity.User;
+import net.mixednutz.app.server.entity.post.AbstractPost;
+import net.mixednutz.app.server.entity.post.AbstractPostComment;
 import net.mixednutz.app.server.entity.post.AbstractPostView;
-import net.mixednutz.app.server.entity.post.Post;
-import net.mixednutz.app.server.entity.post.PostComment;
 import net.mixednutz.app.server.manager.ApiManager;
 import net.mixednutz.app.server.manager.post.PostManager;
 import net.mixednutz.app.server.manager.post.PostViewManager;
 import net.mixednutz.app.server.repository.GroupedPostRepository;
 import net.mixednutz.app.server.repository.PostRepository;
 
-public abstract class PostManagerImpl<P extends Post<C>, C extends PostComment, V extends AbstractPostView> 
+public abstract class PostManagerImpl<P extends AbstractPost<C>, C extends AbstractPostComment, V extends AbstractPostView> 
 	implements PostManager<P,C> {
 	
 	protected PostRepository<P,C> postRepository;
@@ -126,6 +126,41 @@ public abstract class PostManagerImpl<P extends Post<C>, C extends PostComment, 
 		}
 		return authorsById;
 	}	
+	
+	/**
+	 * Is this post visible to the given user
+	 * 
+	 * @param chapter
+	 * @param user Must not be null
+	 * @return
+	 */
+	public boolean isVisible(P post, User user) {
+		if (user==null) {
+			//This check should be done before this method
+			throw new IllegalArgumentException("User cannot be null.");
+		}
+		
+		switch (post.getVisibility().getVisibilityType()) {
+		case ALL_FOLLOWERS:
+			//TODO
+			break;
+		case ALL_FRIENDS:
+			//TODO
+			break;
+		case FRIEND_GROUPS:
+			//TODO
+			break;
+		case SELECT_FOLLOWERS:
+			return post.getVisibility().getSelectFollowers().contains(user);
+		case PRIVATE:
+			return (user.equals(post.getAuthor())||user.equals(post.getOwner()));
+		case ALL_USERS:
+		case WORLD:
+			return true;
+		}
+		return true;
+	}
+
 	
 	private List<P> getMyPostsLessThan(User owner, ZonedDateTime datePublished, 
 			PageRequest pageRequest) {
