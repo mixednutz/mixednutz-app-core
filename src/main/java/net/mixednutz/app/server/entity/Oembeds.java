@@ -38,8 +38,8 @@ public class Oembeds {
 	public abstract static class Oembed {
 		private String type;
 		private String version="1.0";
-		private String providerName=networkInfo.getDisplayName();
-		private String providerUrl="https://"+networkInfo.getHostName();
+		private String providerName;
+		private String providerUrl;
 		private String title;
 		private String authorName;
 		private String thumbnailUrl;
@@ -47,10 +47,13 @@ public class Oembeds {
 		private Integer thumbnailHeight;
 		
 		public Oembed() {
-			super();
+			if (networkInfo!=null) {
+				providerName=networkInfo.getDisplayName();
+				providerUrl="https://"+networkInfo.getHostName();
+			}
 		}
 		public Oembed(String type) {
-			super();
+			this();
 			this.type = type;
 		}
 		/**
