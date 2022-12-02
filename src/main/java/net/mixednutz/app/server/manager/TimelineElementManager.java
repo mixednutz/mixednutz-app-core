@@ -15,4 +15,6 @@ public interface TimelineElementManager {
 	IPage<InternalTimelineElement,Instant> getUserTimelineInternal(
 			User owner, User viewer, IPageRequest<String> paging);
 	
+	long countUserTimelineInteral(User owner, User viewer);
+	
 }

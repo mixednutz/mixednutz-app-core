@@ -108,6 +108,11 @@ public abstract class PostManagerImpl<P extends AbstractPost<C>, C extends Abstr
 			.build();
 	}
 	
+	public long countUserTimelineInteral(User owner, User viewer) {
+		return postRepository.countUsersPosts(owner, viewer);
+	}
+
+	
 	public List<? extends ITimelineElement> getUserTimelineInternal(User user, User viewer, int pageSize) {
 		return this.getUserTimelineInternal(user, viewer, 
 				net.mixednutz.api.core.model.PageRequest.first(pageSize, Direction.LESS_THAN, String.class)).getItems();

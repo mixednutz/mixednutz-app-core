@@ -40,6 +40,12 @@ public class InternalTimelineElement implements ITimelineElement {
 	 * @return
 	 */
 	private String latestSuburl;
+	
+	/**
+	 * Optional latest sub uri for grouped posts
+	 * @return
+	 */
+	private String latestSuburi;
 		
 	/**
 	 * Possible additional actions (outside of normal CRUD actions) that can be performed
@@ -167,6 +173,14 @@ public class InternalTimelineElement implements ITimelineElement {
 
 	public void setLatestSuburl(String suburl) {
 		this.latestSuburl = suburl;
+	}
+
+	public String getLatestSuburi() {
+		return latestSuburi;
+	}
+
+	public void setLatestSuburi(String latestSuburi) {
+		this.latestSuburi = latestSuburi;
 	}
 
 	public List<Action> getActions() {

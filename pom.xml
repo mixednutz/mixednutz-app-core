@@ -58,6 +58,7 @@
 		<java.version>11</java.version>
 		
 		<mixednutz-java-api-core.version>2.1.0</mixednutz-java-api-core.version>
+		<activitypub-api-core.version>0.0.1</activitypub-api-core.version>
 		<spring-social.version>1.1.6.RELEASE</spring-social.version>
 	</properties>
 
@@ -115,6 +116,11 @@
 			<groupId>net.mixednutz</groupId>
 			<artifactId>mixednutz-java-api-core</artifactId>
 			<version>${mixednutz-java-api-core.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>net.mixednutz</groupId>
+			<artifactId>activitypub-java-api-core</artifactId>
+			<version>${activitypub-api-core.version}</version>
 		</dependency>
 		
 		<!--  Spring -->
