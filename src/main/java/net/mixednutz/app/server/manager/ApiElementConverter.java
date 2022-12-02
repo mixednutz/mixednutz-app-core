@@ -18,5 +18,5 @@ public interface ApiElementConverter<Entity> {
 			Authentication auth, String baseUrl);
 	
 	boolean canConvertOembed(String path);
-	
+		
 }

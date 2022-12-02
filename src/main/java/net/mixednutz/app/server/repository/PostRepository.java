@@ -76,4 +76,20 @@ public interface PostRepository<P extends Post<C>, C extends PostComment> extend
 		return queryUsersPostsByDatePublishedLessThanEquals(owner.getUserId(), viewer!=null?viewer.getUserId():null, datePublished, pageRequest);
 	}
 	
+	@Query("select count(p) from #{#entityName} p"
+			+" left join p.visibility.selectFollowers vsf"
+			+ " where p.ownerId = :ownerId"+
+			  " and (p.ownerId = :viewerId"
+			  + " or p.authorId = :viewerId"
+			  + " or p.visibility.visibilityType = 'WORLD'"
+			  + " or (p.visibility.visibilityType = 'ALL_USERS' and :viewerId is not null)"
+			  + " or (p.visibility.visibilityType = 'SELECT_FOLLOWERS' and vsf.userId = :viewerId))")
+	long countUsersPosts(
+			@Param("ownerId")Long ownerId, 
+			@Param("viewerId")Long viewerId);
+	
+	default long countUsersPosts(User owner, User viewer) {
+		return countUsersPosts(owner.getUserId(), viewer!=null?viewer.getUserId():null);
+	}
+	
 }
