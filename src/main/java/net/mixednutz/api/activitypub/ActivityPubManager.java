@@ -16,6 +16,8 @@ import net.mixednutz.app.server.entity.Visibility;
 
 public interface ActivityPubManager {
 	
+	public static final String URI_PREFIX = "/activitypub";
+	
 	void initRoot(BaseObjectOrLink root);
 
 	Note toNote(ITimelineElement element, Visibility visibility, boolean isRoot);

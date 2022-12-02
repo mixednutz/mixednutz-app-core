@@ -64,7 +64,7 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 			}
 		}
 		note.setUrl(itemurl);
-		note.setId(URI.create(networkInfo.getBaseUrl()+"/activitypub"+itemid));
+		note.setId(URI.create(networkInfo.getBaseUrl()+URI_PREFIX+itemid));
 		StringBuffer summaryBuffer = new StringBuffer(element.getTitle());
 		StringBuffer descBuffer = new StringBuffer("<strong>"+element.getTitle()+"</strong>");
 		if (element.getDescription()!=null) {
@@ -144,7 +144,7 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 	public Create toCreate(ITimelineElement element, String username, HttpServletRequest request) {
 		String baseUrl = getBaseUrl(request);
 		Create create = new Create();
-		create.setActor(new LinkImpl(baseUrl+"/activitypub/"+username));
+		create.setActor(new LinkImpl(baseUrl+URI_PREFIX+"/"+username));
 		String itemuri = element.getUri();
 		if (element instanceof InternalTimelineElement) {
 			InternalTimelineElement ite = (InternalTimelineElement)element;
@@ -152,8 +152,8 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 				itemuri = ite.getLatestSuburi();
 			}
 		}
-		create.setObject(new LinkImpl(baseUrl+"/activitypub"+itemuri));
-		create.setId(URI.create(networkInfo.getBaseUrl()+"/activitypub"+itemuri+"#Create"));
+		create.setObject(new LinkImpl(baseUrl+URI_PREFIX+itemuri));
+		create.setId(URI.create(networkInfo.getBaseUrl()+URI_PREFIX+itemuri+"#Create"));
 		return create;
 	}
 
