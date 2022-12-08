@@ -35,6 +35,8 @@ public class UserProfile implements IUserProfile {
 	
 	private String deviantArtUsername;
 	
+	private String activityPubId;
+	
 
 	public UserProfile() {
 		super();
@@ -135,6 +137,14 @@ public class UserProfile implements IUserProfile {
 
 	public void setDeviantArtUsername(String deviantArtUsername) {
 		this.deviantArtUsername = deviantArtUsername;
+	}
+
+	public String getActivityPubId() {
+		return activityPubId;
+	}
+
+	public void setActivityPubId(String activityPubId) {
+		this.activityPubId = activityPubId;
 	}
 
 }
