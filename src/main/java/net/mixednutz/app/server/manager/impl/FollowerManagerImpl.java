@@ -3,6 +3,7 @@ package net.mixednutz.app.server.manager.impl;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 import java.util.stream.StreamSupport;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +25,8 @@ public class FollowerManagerImpl implements FollowerManager {
 
 	@Override
 	public List<Follower> getFollowing(User user) {
-		return StreamSupport.stream(followerRepository.getFollowing(user).spliterator(),false).toList();
+		return StreamSupport.stream(followerRepository.getFollowing(user).spliterator(),false)
+				.collect(Collectors.toList());
 	}
 
 	@Override
@@ -34,7 +36,8 @@ public class FollowerManagerImpl implements FollowerManager {
 
 	@Override
 	public List<Follower> getFollowers(User user) {
-		return StreamSupport.stream(followerRepository.getFollowers(user).spliterator(),false).toList();
+		return StreamSupport.stream(followerRepository.getFollowers(user).spliterator(),false)
+				.collect(Collectors.toList());
 	}
 	
 	@Override
