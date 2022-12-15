@@ -10,7 +10,9 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
+import javax.persistence.PrimaryKeyJoinColumn;
 import javax.persistence.Transient;
 
 import org.hibernate.annotations.GenericGenerator;
@@ -33,6 +35,7 @@ public class User extends BaseUserDetails {
 	private ZonedDateTime memberSince;
 	private String avatarFilename;
 	private boolean _private;
+	private Lastonline lastonline;
 	
 	/*
 	 * password = encrypted password in database
@@ -142,6 +145,16 @@ public class User extends BaseUserDetails {
 		this.passwordRaw = passwordRaw;
 	}
 	
+	@OneToOne(fetch=FetchType.LAZY, optional=true, mappedBy="user")
+	@PrimaryKeyJoinColumn
+	public Lastonline getLastonline() {
+		return lastonline;
+	}
+
+	public void setLastonline(Lastonline lastonline) {
+		this.lastonline = lastonline;
+	}
+
 	public int hashCode () {
 		if (Integer.MIN_VALUE == this.hashCode) {
 			if (null == this.getProviderId()) return super.hashCode();
