@@ -6,7 +6,6 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
-import javax.persistence.MapsId;
 import javax.persistence.OneToOne;
 import javax.persistence.PrePersist;
 import javax.persistence.PreUpdate;
@@ -21,17 +20,20 @@ public class Lastonline {
 	private ZonedDateTime timestamp;
 	private String ipAddress;
 	
+	
+	public static Lastonline firstTimeOnline(User user) {
+		Lastonline lastonline = new Lastonline(user);
+		user.setLastonline(lastonline);
+		return lastonline;
+	}
+	
 	public Lastonline() {
 		super();
 	}
 
-	public Lastonline(Long userId) {
-		super();
-		this.userId = userId;
-	}
-	
 	public Lastonline(User user) {
-		this(user.getUserId());
+		this.userId = user.getUserId();
+		this.user = user;
 	}
 	
 	@PreUpdate
@@ -49,8 +51,7 @@ public class Lastonline {
 	public void setUserId(Long userId) {
 		this.userId = userId;
 	}
-	@OneToOne
-	@MapsId
+	@OneToOne(mappedBy="lastonline")
 	@JoinColumn(name="user_id", updatable=false, insertable=false)
 	public User getUser() {
 		return user;

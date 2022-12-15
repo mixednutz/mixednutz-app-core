@@ -17,7 +17,7 @@ public interface FollowerRepository extends CrudRepository<Follower, FollowerPK>
 	 * @return
 	 */
 	default Iterable<Follower> getFollowing(User user) {
-		return findByFollowerAndPendingOrderByUser_Lastonline_Timestamp(user, false);
+		return findByFollowerAndPendingAndUser_LastonlineIsNotNullOrderByUser_Lastonline_TimestampDesc(user, false);
 	}
 	default long countFollowing(User user) {
 		return countByFollowerAndPending(user, false);
@@ -30,7 +30,7 @@ public interface FollowerRepository extends CrudRepository<Follower, FollowerPK>
 	 * @return
 	 */
 	default Iterable<Follower> getFollowers(User user) {
-		return findByUserAndPendingOrderByFollower_Lastonline_Timestamp(user, false);
+		return findByUserAndPendingAndFollower_LastonlineIsNotNullOrderByFollower_Lastonline_TimestampDesc(user, false);
 	}
 	default long countFollowers(User user) {
 		return countByUserAndPending(user, false);
@@ -43,14 +43,14 @@ public interface FollowerRepository extends CrudRepository<Follower, FollowerPK>
 	 * @return
 	 */
 	default Iterable<Follower> getPendingFollowers(User user) {
-		return findByUserAndPendingOrderByFollower_Lastonline_Timestamp(user, true);
+		return findByUserAndPendingAndFollower_LastonlineIsNotNullOrderByFollower_Lastonline_TimestampDesc(user, true);
 	}
 	
-	Iterable<Follower> findByFollowerAndPendingOrderByUser_Lastonline_Timestamp(User follower, boolean pending);
+	Iterable<Follower> findByFollowerAndPendingAndUser_LastonlineIsNotNullOrderByUser_Lastonline_TimestampDesc(User follower, boolean pending);
 	
 	long countByFollowerAndPending(User follower, boolean pending);
 	
-	Iterable<Follower> findByUserAndPendingOrderByFollower_Lastonline_Timestamp(User user, boolean pending);
+	Iterable<Follower> findByUserAndPendingAndFollower_LastonlineIsNotNullOrderByFollower_Lastonline_TimestampDesc(User user, boolean pending);
 	
 	long countByUserAndPending(User user, boolean pending);
 	
