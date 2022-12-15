@@ -145,7 +145,7 @@ public class User extends BaseUserDetails {
 		this.passwordRaw = passwordRaw;
 	}
 	
-	@OneToOne(fetch=FetchType.LAZY, optional=true, mappedBy="user")
+	@OneToOne(fetch=FetchType.LAZY, optional=true)
 	@PrimaryKeyJoinColumn
 	public Lastonline getLastonline() {
 		return lastonline;
