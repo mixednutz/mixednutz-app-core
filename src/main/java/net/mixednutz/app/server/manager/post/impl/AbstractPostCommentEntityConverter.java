@@ -23,6 +23,9 @@ public abstract class AbstractPostCommentEntityConverter<C extends AbstractPostC
 		api.setId(entity.getCommentId());
 		api.setDescription(entity.getBody());
 		
+		//This overwrites the default setting. URL is left alone.
+		api.setUri(entity.getUriNoAnchor());
+		
 		api.setInReplyToUri(entity.getPost().getUri());
 		api.setInReplyToUrl(baseUrl+entity.getPost().getUri());
 		

@@ -10,6 +10,8 @@ public interface PostComment extends Comment {
 	
 	String getUri();
 	
+	String getUriNoAnchor();
+	
 	<C extends PostComment> C getInReplyTo();
 	
 }
