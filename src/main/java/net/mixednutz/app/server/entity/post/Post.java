@@ -7,6 +7,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 import net.mixednutz.app.server.entity.User;
+import net.mixednutz.app.server.entity.Visibility;
 
 /**
  * @author Andy
@@ -36,5 +37,7 @@ public interface Post<C extends PostComment> {
 	void setComments(List<C> comments);
 	
 	String getUri();
+	
+	Visibility getVisibility();
 
 }

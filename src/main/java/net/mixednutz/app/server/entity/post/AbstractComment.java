@@ -21,6 +21,7 @@ public abstract class AbstractComment implements Comment{
 	private String body;
 	private ZonedDateTime dateCreated;
 	private User author;
+	private Long authorId;
 				
 	@PrePersist
 	public void onPersist() {
@@ -31,9 +32,14 @@ public abstract class AbstractComment implements Comment{
 	 * @return Returns the author.
 	 */
 	@ManyToOne()
-	@JoinColumn(name="author_id")
+	@JoinColumn(name="author_id", insertable=false, updatable=false)
 	public User getAuthor() {
 		return author;
+	}
+	
+	@Column(name="author_id", insertable=true, updatable=false)
+	public Long getAuthorId() {
+		return authorId;
 	}
 	
 	/**
@@ -64,6 +70,10 @@ public abstract class AbstractComment implements Comment{
 
 	public void setAuthor(User author) {
 		this.author = author;
+	}
+
+	public void setAuthorId(Long authorId) {
+		this.authorId = authorId;
 	}
 
 }

@@ -65,8 +65,16 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 		}
 		note.setUrl(itemurl);
 		note.setId(URI.create(networkInfo.getBaseUrl()+URI_PREFIX+itemid));
-		StringBuffer summaryBuffer = new StringBuffer(element.getTitle());
-		StringBuffer descBuffer = new StringBuffer("<strong>"+element.getTitle()+"</strong>");
+		StringBuffer summaryBuffer = new StringBuffer();
+		if (element.getTitle()!=null) {
+			summaryBuffer.append(element.getTitle());
+		} else {
+			summaryBuffer.append(element.getDescription());
+		}
+		StringBuffer descBuffer = new StringBuffer();
+		if (element.getTitle()!=null) {
+			descBuffer.append("<strong>"+element.getTitle()+"</strong>");
+		}
 		if (element.getDescription()!=null) {
 			descBuffer.append("<p>"+element.getDescription()+"</p>");
 		}
@@ -153,7 +161,7 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 			}
 		}
 		create.setObject(new LinkImpl(baseUrl+URI_PREFIX+itemuri));
-		create.setId(URI.create(networkInfo.getBaseUrl()+URI_PREFIX+itemuri+"#Create"));
+		create.setId(URI.create(networkInfo.getBaseUrl()+URI_PREFIX+"/Create"+itemuri));
 		return create;
 	}
 

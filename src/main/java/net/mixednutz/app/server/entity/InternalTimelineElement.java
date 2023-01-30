@@ -46,6 +46,16 @@ public class InternalTimelineElement implements ITimelineElement {
 	 * @return
 	 */
 	private String latestSuburi;
+	
+	/**
+	 * Optional URL to element this is in reply to.
+	 */
+	private String inReplyToUrl;
+	
+	/**
+	 * Optional URL to element this is in reply to.
+	 */
+	private String inReplyToUri;
 		
 	/**
 	 * Possible additional actions (outside of normal CRUD actions) that can be performed
@@ -86,6 +96,11 @@ public class InternalTimelineElement implements ITimelineElement {
 	 * Optional latest subtitle for grouped posts that have titles
 	 */
 	private String latestSubtitle;
+
+	/**
+	 * Optional titles of element this is in reply to.
+	 */
+	private String inReplyToTitle;
 	
 	/**
 	 * Optional short description (may be truncated)
@@ -183,6 +198,22 @@ public class InternalTimelineElement implements ITimelineElement {
 		this.latestSuburi = latestSuburi;
 	}
 
+	public String getInReplyToUrl() {
+		return inReplyToUrl;
+	}
+
+	public void setInReplyToUrl(String inReplyToUrl) {
+		this.inReplyToUrl = inReplyToUrl;
+	}
+
+	public String getInReplyToUri() {
+		return inReplyToUri;
+	}
+
+	public void setInReplyToUri(String inReplyToUri) {
+		this.inReplyToUri = inReplyToUri;
+	}
+
 	public List<Action> getActions() {
 		return actions;
 	}
@@ -245,6 +276,14 @@ public class InternalTimelineElement implements ITimelineElement {
 
 	public void setLatestSubtitle(String latestSubtitle) {
 		this.latestSubtitle = latestSubtitle;
+	}
+
+	public String getInReplyToTitle() {
+		return inReplyToTitle;
+	}
+
+	public void setInReplyToTitle(String inReplyToTitle) {
+		this.inReplyToTitle = inReplyToTitle;
 	}
 
 	public String getDescription() {
