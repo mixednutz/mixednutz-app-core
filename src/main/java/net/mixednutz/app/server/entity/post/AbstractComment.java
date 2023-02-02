@@ -8,6 +8,7 @@ import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 import javax.persistence.MappedSuperclass;
 import javax.persistence.PrePersist;
+import javax.persistence.PreUpdate;
 
 import net.mixednutz.app.server.entity.User;
 
@@ -20,12 +21,18 @@ public abstract class AbstractComment implements Comment{
 	
 	private String body;
 	private ZonedDateTime dateCreated;
+	private ZonedDateTime dateUpdated;
 	private User author;
 	private Long authorId;
 				
 	@PrePersist
 	public void onPersist() {
 		this.dateCreated=ZonedDateTime.now();
+	}
+	
+	@PreUpdate
+	public void onUpdate() {
+		this.dateUpdated=ZonedDateTime.now();
 	}
 		
 	/**
@@ -62,6 +69,14 @@ public abstract class AbstractComment implements Comment{
 	 */
 	public void setDateCreated(ZonedDateTime timestamp) {
 		this.dateCreated = timestamp;
+	}
+
+	public ZonedDateTime getDateUpdated() {
+		return dateUpdated;
+	}
+
+	public void setDateUpdated(ZonedDateTime dateUpdated) {
+		this.dateUpdated = dateUpdated;
 	}
 
 	public void setBody(String body) {
