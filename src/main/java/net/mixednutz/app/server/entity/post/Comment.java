@@ -22,6 +22,9 @@ public interface Comment {
 	public ZonedDateTime getDateCreated();
 	public void setDateCreated(ZonedDateTime timestamp);
 	
+	public ZonedDateTime getDateUpdated();
+	public void setDateUpdated(ZonedDateTime timestamp);
+	
 	public <C extends Comment> void setParentComment(C parentComment);
 
 }
