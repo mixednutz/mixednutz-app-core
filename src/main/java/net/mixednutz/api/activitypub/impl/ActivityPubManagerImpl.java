@@ -4,11 +4,13 @@ import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URL;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
 import org.w3c.activitystreams.model.BaseObjectOrLink;
 import org.w3c.activitystreams.model.ImageImpl;
 import org.w3c.activitystreams.model.LinkImpl;
@@ -23,6 +25,7 @@ import net.mixednutz.api.model.IUserSmall;
 import net.mixednutz.app.server.entity.InternalTimelineElement;
 import net.mixednutz.app.server.entity.User;
 import net.mixednutz.app.server.entity.Visibility;
+import net.mixednutz.app.server.manager.UserKeyManager;
 import net.mixednutz.app.server.repository.UserProfileRepository;
 
 @Service
@@ -30,6 +33,9 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 	
 	@Autowired
 	private UserProfileRepository profileRepository;
+	
+	@Autowired
+	private UserKeyManager userKeyManager;
 	
 	private String getBaseUrl(HttpServletRequest request) {
 		try {
@@ -46,9 +52,15 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 	
 	@Autowired
 	private NetworkInfo networkInfo;
-
+	
+	public URI getActorUri(String username) {
+		return UriComponentsBuilder
+				.fromHttpUrl(networkInfo.getBaseUrl()+URI_PREFIX+USER_ACTOR_ENDPOINT)
+				.buildAndExpand(Map.of("username",username)).toUri();
+	}
+	
 	@Override
-	public Note toNote(ITimelineElement element, Visibility visibility, boolean isRoot) {
+	public Note toNote(ITimelineElement element, String authorUsername, Visibility visibility, boolean isRoot) {
 		Note note = new Note();
 		if (isRoot) initRoot(note);
 		
@@ -94,7 +106,7 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 		note.setContent(descBuffer.toString()); 
 		note.setSummary(summaryBuffer.toString());
 		note.setPublished(element.getPostedOnDate());
-		note.setAttributedTo(new LinkImpl(element.getPostedByUser().getUrl()));
+		note.setAttributedTo(new LinkImpl(getActorUri(authorUsername)));
 		switch (visibility.getVisibilityType()) {
 		case ALL_FOLLOWERS:
 			//TODO this is the followers collection
@@ -109,7 +121,7 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 			//TODO collection of actors
 			break;
 		case PRIVATE:
-			note.setTo(new LinkImpl(element.getPostedByUser().getUrl()));
+			note.setTo(new LinkImpl(getActorUri(authorUsername)));
 			break;
 		case ALL_USERS:
 		case WORLD:
@@ -125,15 +137,16 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 	}
 
 	@Override
-	public Person toPerson(IUserSmall user, User nativeUser, HttpServletRequest request, URI userOutbox, boolean isRoot) {
+	public Person toPerson(IUserSmall user, User nativeUser, HttpServletRequest request, 
+			URI id, URI userOutbox, URI userInbox, boolean isRoot) {
 		
 		Person person = new Person();
 		if (isRoot) initRoot(person);
-		person.setId(URI.create(user.getUrl()));
+		person.setId(id);
 		person.setUrl(user.getUrl());
 		person.setName(user.getDisplayName());
 		person.setPreferredUsername(user.getUsername()+"@"+networkInfo.getHostName());
-		person.setInbox("inbox");
+		person.setInbox(userInbox);
 		person.setOutbox(userOutbox);
 		if (user.getAvatar()!=null) {
 			ImageImpl icon = new ImageImpl();
@@ -146,6 +159,9 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 		profileRepository.findById(nativeUser.getUserId()).ifPresent(profile->{
 			person.setSummary(profile.getBio());
 		});
+		
+		userKeyManager.setPublicKeyPem(nativeUser, person);
+				
 		return person;
 	}
 

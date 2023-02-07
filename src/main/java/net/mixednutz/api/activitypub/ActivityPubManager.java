@@ -17,12 +17,16 @@ import net.mixednutz.app.server.entity.Visibility;
 public interface ActivityPubManager {
 	
 	public static final String URI_PREFIX = "/activitypub";
+	public static final String USER_ACTOR_ENDPOINT = "/{username}";
+	
+	URI getActorUri(String username);
 	
 	void initRoot(BaseObjectOrLink root);
 
-	Note toNote(ITimelineElement element, Visibility visibility, boolean isRoot);
+	Note toNote(ITimelineElement element, String authorUsername, Visibility visibility, boolean isRoot);
 	
-	Person toPerson(IUserSmall user, User nativeUser, HttpServletRequest request, URI userOutbox, boolean isRoot);
+	Person toPerson(IUserSmall user, User nativeUser, HttpServletRequest request, 
+			URI id, URI userOutbox, URI userInbox, boolean isRoot);
 	
 	Create toCreate(ITimelineElement element, String username, HttpServletRequest request);
 	
