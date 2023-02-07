@@ -1,5 +1,7 @@
 package net.mixednutz.app.server.entity;
 
+import java.net.URI;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -35,7 +37,7 @@ public class UserProfile implements IUserProfile {
 	
 	private String deviantArtUsername;
 	
-	private String activityPubId;
+	private URI activityPubActorUri;
 	
 
 	public UserProfile() {
@@ -139,12 +141,12 @@ public class UserProfile implements IUserProfile {
 		this.deviantArtUsername = deviantArtUsername;
 	}
 
-	public String getActivityPubId() {
-		return activityPubId;
+	public URI getActivityPubActorUri() {
+		return activityPubActorUri;
 	}
 
-	public void setActivityPubId(String activityPubId) {
-		this.activityPubId = activityPubId;
+	public void setActivityPubActorUri(URI activityPubId) {
+		this.activityPubActorUri = activityPubId;
 	}
 
 }

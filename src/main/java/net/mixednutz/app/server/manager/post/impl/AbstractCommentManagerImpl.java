@@ -80,8 +80,16 @@ public abstract class AbstractCommentManagerImpl<C extends AbstractPostComment> 
 	}
 	
 	public IPage<InternalTimelineElement, Instant> getTimelineInternal(User owner, IPageRequest<String> paging) {
-		// TODO Auto-generated method stub
-		return null;
+		final net.mixednutz.api.core.model.PageRequest<Instant> pageRequest = net.mixednutz.api.core.model.PageRequest
+				.convert(paging, Instant.class, (str) -> {
+					return ZonedDateTime.parse(str).toInstant();
+				});
+		
+		return new PageBuilder<InternalTimelineElement, Instant>()
+				.setItems(new ArrayList<>())
+				.setPageRequest(pageRequest)
+				.setTokenCallback((item)->item.getPostedOnDate().toInstant())
+				.build();
 	}
 
 	public long countUserTimelineInteral(User owner, User viewer) {
