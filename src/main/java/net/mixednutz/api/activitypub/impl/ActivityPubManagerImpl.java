@@ -145,7 +145,7 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 		person.setId(id);
 		person.setUrl(user.getUrl());
 		person.setName(user.getDisplayName());
-		person.setPreferredUsername(user.getUsername()+"@"+networkInfo.getHostName());
+		person.setPreferredUsername(user.getUsername());
 		person.setInbox(userInbox);
 		person.setOutbox(userOutbox);
 		if (user.getAvatar()!=null) {
