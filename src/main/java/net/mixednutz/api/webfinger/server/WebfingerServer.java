@@ -1,4 +1,4 @@
-package net.mixednutz.app.server.webfinger.server;
+package net.mixednutz.api.webfinger.server;
 
 import java.net.URI;
 import java.util.List;
@@ -9,11 +9,11 @@ import org.springframework.stereotype.Component;
 
 import net.mixednutz.api.activitypub.ActivityPubManager;
 import net.mixednutz.api.core.model.NetworkInfo;
+import net.mixednutz.api.webfinger.WebfingerResponse;
+import net.mixednutz.api.webfinger.WebfingerResponse.Link;
 import net.mixednutz.app.server.controller.exception.UserNotFoundException;
 import net.mixednutz.app.server.entity.User;
 import net.mixednutz.app.server.repository.UserRepository;
-import net.mixednutz.app.server.webfinger.WebfingerResponse;
-import net.mixednutz.app.server.webfinger.WebfingerResponse.Link;
 
 @Component
 public class WebfingerServer {

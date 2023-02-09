@@ -1,4 +1,4 @@
-package net.mixednutz.app.server.webfinger;
+package net.mixednutz.api.webfinger;
 
 public class WebfingerSettings {
 

@@ -1,4 +1,4 @@
-package net.mixednutz.app.server.webfinger.client;
+package net.mixednutz.api.webfinger.client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -8,8 +8,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 
-import net.mixednutz.app.server.webfinger.WebfingerResponse;
-import net.mixednutz.app.server.webfinger.WebfingerResponse.Link;
+import net.mixednutz.api.webfinger.WebfingerResponse;
+import net.mixednutz.api.webfinger.WebfingerResponse.Link;
+import net.mixednutz.api.webfinger.client.WebfingerClient;
 
 
 public class WebfingerClientIntegrationTest {

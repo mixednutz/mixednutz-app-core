@@ -1,4 +1,4 @@
-package net.mixednutz.app.server.webfinger;
+package net.mixednutz.api.webfinger;
 
 import java.net.URI;
 import java.util.List;

@@ -1,4 +1,6 @@
-package net.mixednutz.app.server.webfinger.client;
+package net.mixednutz.api.webfinger.client;
+
+import static net.mixednutz.api.webfinger.WebfingerSettings.*;
 
 import java.net.URI;
 
@@ -9,9 +11,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import net.mixednutz.app.server.webfinger.WebfingerResponse;
-
-import static net.mixednutz.app.server.webfinger.WebfingerSettings.*;
+import net.mixednutz.api.webfinger.WebfingerResponse;
 
 @Component
 public class WebfingerClient {
