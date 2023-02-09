@@ -187,23 +187,26 @@ public class UserKeyManagerImpl implements UserKeyManager {
 			if (userKey.isPresent()) {
 				PrivateKey s = getPrivateKey(userKey.get());
 				sig.initSign(s);
+			} else {
+				throw new RuntimeException("No private key found for user "+user.getUserId());
 			}
 			LOG.info("Signature string: \n{}", strToSign);
 			sig.update(strToSign.toString().getBytes(StandardCharsets.UTF_8));
 			signature = sig.sign();
 		} catch (Exception e) {
-			e.printStackTrace();
+			LOG.error("Exception while signing request", e);
 			throw new RuntimeException(e);
 		}
 		
 		// SIGNATURE HEADER
 		String sigHeader = new StringBuffer()
 				.append("keyId=\""+actorUri.toString()+"#"+UserKeyManager.KEY_NAME+"\",")
-				.append("headers=\"(request-target) host date"+(digestHeader!=null ? " digest," : ","))
+				.append("headers=\"(request-target) host date"+(digestHeader!=null ? " digest\"," : "\","))
 				.append("algorithm=\"rsa-sha256\",")
 				.append("signature=\"").append(Base64.getEncoder()
 						.encodeToString(signature)).append("\"")
 				.toString();
+		LOG.info("Signature: {}", sigHeader);
 		headers.set("Signature", sigHeader);
 	}
 	
