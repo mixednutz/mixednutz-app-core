@@ -11,7 +11,7 @@ import org.w3c.activitystreams.model.ActorImpl;
 
 public class ActivityPubClientIntegrationTest {
 
-	private static final String ACTOR_URI = "https://tfemily.com/activitypub/Emily";
+	private static final String ACTOR_URI = "x";
 	
 	@Disabled
 	@Test
