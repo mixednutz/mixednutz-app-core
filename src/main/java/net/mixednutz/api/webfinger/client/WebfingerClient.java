@@ -24,14 +24,16 @@ public class WebfingerClient {
 		this.rest = restTemplateBuilder.build();
 	}
 
-	public ResponseEntity<WebfingerResponse> webfinger(String preferredName, String host) {
+	public WebfingerResponse webfinger(String preferredName, String host) {
 		URI resource = URI.create("acct:"+preferredName+"@"+host);
 		
 		URI endpoint = UriComponentsBuilder.fromUriString("https://"+host+WEBFINGER_ENDPOINT)
 			.queryParam("resource", resource.toString())
 			.build().toUri();
 		
-		return rest.getForEntity(endpoint, WebfingerResponse.class);		
+		ResponseEntity<WebfingerResponse> response = 
+				rest.getForEntity(endpoint, WebfingerResponse.class);		
+		return response.getBody();
 	}
 	
 }

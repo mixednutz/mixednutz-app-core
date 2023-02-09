@@ -6,25 +6,28 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-import org.springframework.http.ResponseEntity;
 
 import net.mixednutz.api.webfinger.WebfingerResponse;
 import net.mixednutz.api.webfinger.WebfingerResponse.Link;
-import net.mixednutz.api.webfinger.client.WebfingerClient;
 
 
 public class WebfingerClientIntegrationTest {
 
+	
+	private static final String PREFERRED_NAME = "x";
+	private static final String HOST = "host";
+	private static final String EXPECTED_ACTOR_URI = "actor";
+	
 	@Disabled
 	@Test
 	public void test() {
 		WebfingerClient client = new WebfingerClient(new RestTemplateBuilder());
-		ResponseEntity<WebfingerResponse> response = client.webfinger("x", "host");
-		assertNotNull(response.getBody());
-		Link link = response.getBody().getLinks().stream()
+		WebfingerResponse response = client.webfinger(PREFERRED_NAME, HOST);
+		assertNotNull(response);
+		Link link = response.getLinks().stream()
 				.filter(l->"application/activity+json".equals(l.getType()))
 				.findFirst().get();
-		assertEquals("actor",link.getHref());
+		assertEquals(EXPECTED_ACTOR_URI,link.getHref());
 	}
 	
 }
