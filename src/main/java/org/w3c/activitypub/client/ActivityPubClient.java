@@ -61,6 +61,9 @@ public class ActivityPubClient {
 		RestTemplate rest = restTemplateBuilder.additionalInterceptors(
 				(request, body, execution) -> {
 					requestSigner.signRequest(request, body);
+					LOG.info("Request: {} {}", request.getMethod(), request.getURI());
+					LOG.info("Request Headers: {}", HttpHeaders.formatHeaders(request.getHeaders()));
+					LOG.info("Request Body: {} ",new String(body));
 					return execution.execute(request, body);
 				}).build();
 		
@@ -75,11 +78,11 @@ public class ActivityPubClient {
 			ResponseEntity<String> response = rest.exchange(
 					destinationInbox, HttpMethod.POST, 
 					requestEntity, String.class);
-			
-			System.out.println(response.getStatusCode());
-			System.out.println(response.getBody());
+			LOG.info("Response Code: {}", response.getStatusCode());
+			LOG.info("Response Body: {}",response.getBody());
 		} catch (HttpClientErrorException e) {
 			LOG.error("Error sending activity", e);
+			LOG.error("Response Body: {}", e.getResponseBodyAsString());
 			System.out.println(e.getStatusCode());
 			System.out.println(e.getResponseBodyAsString());
 			throw new RuntimeException(e);
