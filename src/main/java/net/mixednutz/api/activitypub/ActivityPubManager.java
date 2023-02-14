@@ -19,6 +19,8 @@ public interface ActivityPubManager {
 	
 	public static final String URI_PREFIX = "/activitypub";
 	public static final String USER_ACTOR_ENDPOINT = "/{username}";
+	public static final String CREATE_URI_PREFIX = URI_PREFIX + "/Create";
+	public static final String NOTE_URI_PREFIX = URI_PREFIX + "/Note";
 	
 	URI getActorUri(String username);
 	

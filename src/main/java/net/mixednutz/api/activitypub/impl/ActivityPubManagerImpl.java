@@ -67,7 +67,7 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 			}
 		}
 		note.setUrl(itemurl);
-		note.setId(URI.create(networkInfo.getBaseUrl()+URI_PREFIX+"/Note"+itemid));
+		note.setId(URI.create(networkInfo.getBaseUrl()+NOTE_URI_PREFIX+itemid));
 		StringBuffer summaryBuffer = new StringBuffer();
 		if (element.getTitle()!=null) {
 			summaryBuffer.append(element.getTitle());
@@ -172,7 +172,7 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 			}
 		}
 		create.setObject(new LinkImpl(note.getId()));
-		create.setId(URI.create(networkInfo.getBaseUrl()+URI_PREFIX+"/Create"+itemuri));
+		create.setId(URI.create(networkInfo.getBaseUrl()+CREATE_URI_PREFIX+itemuri));
 		return create;
 	}
 	
