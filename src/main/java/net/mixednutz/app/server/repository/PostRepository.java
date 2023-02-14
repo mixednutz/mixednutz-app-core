@@ -47,7 +47,8 @@ public interface PostRepository<P extends Post<C>, C extends PostComment> extend
 			  + " or p.visibility.visibilityType = 'WORLD'"
 			  + " or (p.visibility.visibilityType = 'ALL_USERS' and :viewerId is not null)"
 			  + " or (p.visibility.visibilityType = 'SELECT_FOLLOWERS' and vsf.userId = :viewerId))"
-			  + " and p.datePublished > :datePublished")
+			  + " and p.datePublished > :datePublished"
+			+ " order by p.datePublished desc")
 	List<P> queryUsersPostsByDatePublishedGreaterThan(
 			@Param("ownerId")Long ownerId, 
 			@Param("viewerId")Long viewerId, 
@@ -66,7 +67,8 @@ public interface PostRepository<P extends Post<C>, C extends PostComment> extend
 			  + " or p.visibility.visibilityType = 'WORLD'"
 			  + " or (p.visibility.visibilityType = 'ALL_USERS' and :viewerId is not null)"
 			  + " or (p.visibility.visibilityType = 'SELECT_FOLLOWERS' and vsf.userId = :viewerId))"
-			  + " and p.datePublished <= :datePublished")
+			  + " and p.datePublished <= :datePublished"
+			+ " order by p.datePublished desc")
 	List<P> queryUsersPostsByDatePublishedLessThanEquals(
 			@Param("ownerId")Long ownerId, 
 			@Param("viewerId")Long viewerId, 

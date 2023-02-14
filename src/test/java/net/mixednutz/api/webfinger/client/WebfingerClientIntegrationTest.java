@@ -14,9 +14,9 @@ import net.mixednutz.api.webfinger.WebfingerResponse.Link;
 public class WebfingerClientIntegrationTest {
 
 	
-	private static final String PREFERRED_NAME = "x";
-	private static final String HOST = "host";
-	private static final String EXPECTED_ACTOR_URI = "actor";
+	private static final String PREFERRED_NAME = "festaindctest";
+	private static final String HOST = "universeodon.com";
+	private static final String EXPECTED_ACTOR_URI = "https://universeodon.com/users/festaindctest";
 	
 	@Disabled
 	@Test

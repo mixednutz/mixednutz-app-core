@@ -37,9 +37,10 @@ public class UserProfile implements IUserProfile {
 	
 	private String deviantArtUsername;
 	
+	private String fediverseUsername;
 	private URI activityPubActorUri;
 	
-
+	
 	public UserProfile() {
 		super();
 	}
@@ -147,6 +148,14 @@ public class UserProfile implements IUserProfile {
 
 	public void setActivityPubActorUri(URI activityPubId) {
 		this.activityPubActorUri = activityPubId;
+	}
+
+	public String getFediverseUsername() {
+		return fediverseUsername;
+	}
+
+	public void setFediverseUsername(String fediverseUsername) {
+		this.fediverseUsername = fediverseUsername;
 	}
 
 }

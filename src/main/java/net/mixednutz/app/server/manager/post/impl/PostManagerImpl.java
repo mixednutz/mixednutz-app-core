@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 
@@ -29,6 +31,8 @@ import net.mixednutz.app.server.repository.PostRepository;
 
 public abstract class PostManagerImpl<P extends AbstractPost<C>, C extends AbstractPostComment, V extends AbstractPostView> 
 	implements PostManager<P,C> {
+	
+	private final Logger LOG = LoggerFactory.getLogger(getClass());
 	
 	protected PostRepository<P,C> postRepository;
 	
@@ -200,6 +204,7 @@ public abstract class PostManagerImpl<P extends AbstractPost<C>, C extends Abstr
 	private List<P> getUsersPostsByDatePublishedLessThanEquals(User owner, User viewer,
 			ZonedDateTime datePublished,
 			PageRequest pageRequest) {
+		LOG.debug("Get posts for user {} older than {}", owner.getUsername(), datePublished);
 		if (postRepository instanceof GroupedPostRepository) {
 			GroupedPostRepository groupedPostRepository = (GroupedPostRepository) postRepository;
 			return groupedPostRepository.getUsersGroupedPostsLessThan(owner, viewer, 
@@ -212,6 +217,7 @@ public abstract class PostManagerImpl<P extends AbstractPost<C>, C extends Abstr
 	private List<P> getUsersPostsByDatePublishedGreaterThan(User owner, User viewer,
 			ZonedDateTime datePublished,
 			PageRequest pageRequest) {
+		LOG.debug("Get posts for user {} newer than {}", owner.getUsername(), datePublished);
 		if (postRepository instanceof GroupedPostRepository) {
 			GroupedPostRepository groupedPostRepository = (GroupedPostRepository) postRepository;
 			return groupedPostRepository.getUsersGroupedPostsGreaterThan(owner, viewer, 
