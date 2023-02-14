@@ -1,8 +1,6 @@
 package net.mixednutz.api.activitypub.impl;
 
-import java.net.MalformedURLException;
 import java.net.URI;
-import java.net.URL;
 import java.util.List;
 import java.util.Map;
 
@@ -15,8 +13,12 @@ import org.w3c.activitystreams.model.BaseObjectOrLink;
 import org.w3c.activitystreams.model.ImageImpl;
 import org.w3c.activitystreams.model.LinkImpl;
 import org.w3c.activitystreams.model.Note;
+import org.w3c.activitystreams.model.activity.Accept;
 import org.w3c.activitystreams.model.activity.Create;
+import org.w3c.activitystreams.model.activity.Follow;
 import org.w3c.activitystreams.model.actor.Person;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import net.mixednutz.api.activitypub.ActivityPubManager;
 import net.mixednutz.api.core.model.NetworkInfo;
@@ -24,7 +26,6 @@ import net.mixednutz.api.model.ITimelineElement;
 import net.mixednutz.api.model.IUserSmall;
 import net.mixednutz.app.server.entity.InternalTimelineElement;
 import net.mixednutz.app.server.entity.User;
-import net.mixednutz.app.server.entity.Visibility;
 import net.mixednutz.app.server.manager.UserKeyManager;
 import net.mixednutz.app.server.repository.UserProfileRepository;
 
@@ -37,18 +38,8 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 	@Autowired
 	private UserKeyManager userKeyManager;
 	
-	private String getBaseUrl(HttpServletRequest request) {
-		try {
-			URL baseUrl = new URL(
-					request.getScheme(), 
-					request.getServerName(), 
-					request.getServerPort(), 
-					"");
-			return baseUrl.toExternalForm();
-		} catch (MalformedURLException e) {
-			throw new RuntimeException("Something's wrong with creating the baseUrl!", e);
-		}
-	}
+	@Autowired
+	ObjectMapper objectMapper;
 	
 	@Autowired
 	private NetworkInfo networkInfo;
@@ -60,7 +51,7 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 	}
 	
 	@Override
-	public Note toNote(ITimelineElement element, String authorUsername, Visibility visibility, boolean isRoot) {
+	public Note toNote(ITimelineElement element, String authorUsername, boolean isRoot) {
 		Note note = new Note();
 		if (isRoot) initRoot(note);
 		
@@ -76,7 +67,7 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 			}
 		}
 		note.setUrl(itemurl);
-		note.setId(URI.create(networkInfo.getBaseUrl()+URI_PREFIX+itemid));
+		note.setId(URI.create(networkInfo.getBaseUrl()+URI_PREFIX+"/Note"+itemid));
 		StringBuffer summaryBuffer = new StringBuffer();
 		if (element.getTitle()!=null) {
 			summaryBuffer.append(element.getTitle());
@@ -107,7 +98,7 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 		note.setSummary(summaryBuffer.toString());
 		note.setPublished(element.getPostedOnDate());
 		note.setAttributedTo(new LinkImpl(getActorUri(authorUsername)));
-		switch (visibility.getVisibilityType()) {
+		switch (element.getVisibility().getVisibilityType()) {
 		case ALL_FOLLOWERS:
 			//TODO this is the followers collection
 			break;
@@ -121,11 +112,11 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 			//TODO collection of actors
 			break;
 		case PRIVATE:
-			note.setTo(new LinkImpl(getActorUri(authorUsername)));
+			note.setTo(List.of(new LinkImpl(getActorUri(authorUsername))));
 			break;
 		case ALL_USERS:
 		case WORLD:
-			note.setTo(new LinkImpl(BaseObjectOrLink.PUBLIC));
+			note.setTo(List.of(new LinkImpl(BaseObjectOrLink.PUBLIC)));
 			break;
 		}
 		//TODO implement tags (when search feature is available in mixednutz)
@@ -133,12 +124,12 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 	}
 	
 	public void initRoot(BaseObjectOrLink root) {
-		root.set_Context(BaseObjectOrLink.CONTEXT);
+		root.setContext(List.of(BaseObjectOrLink.CONTEXT));
 	}
 
 	@Override
 	public Person toPerson(IUserSmall user, User nativeUser, HttpServletRequest request, 
-			URI id, URI userOutbox, URI userInbox, boolean isRoot) {
+			URI id, URI userOutbox, URI userInbox, URI followers, URI following, boolean isRoot) {
 		
 		Person person = new Person();
 		if (isRoot) initRoot(person);
@@ -148,6 +139,8 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 		person.setPreferredUsername(user.getUsername());
 		person.setInbox(userInbox);
 		person.setOutbox(userOutbox);
+		person.setFollowers(followers);
+		person.setFollowing(following);
 		if (user.getAvatar()!=null) {
 			ImageImpl icon = new ImageImpl();
 			icon.setUrl(user.getAvatar().getSrc());
@@ -165,10 +158,12 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 		return person;
 	}
 
-	public Create toCreate(ITimelineElement element, String username, HttpServletRequest request) {
-		String baseUrl = getBaseUrl(request);
+	public Create toCreate(ITimelineElement element, Note note, String username) {
+		
 		Create create = new Create();
-		create.setActor(new LinkImpl(baseUrl+URI_PREFIX+"/"+username));
+		initRoot(create);
+		create.setActor(new LinkImpl(getActorUri(username)));
+		create.setTo(note.getTo());
 		String itemuri = element.getUri();
 		if (element instanceof InternalTimelineElement) {
 			InternalTimelineElement ite = (InternalTimelineElement)element;
@@ -176,9 +171,37 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 				itemuri = ite.getLatestSuburi();
 			}
 		}
-		create.setObject(new LinkImpl(baseUrl+URI_PREFIX+itemuri));
+		create.setObject(new LinkImpl(note.getId()));
 		create.setId(URI.create(networkInfo.getBaseUrl()+URI_PREFIX+"/Create"+itemuri));
 		return create;
+	}
+	
+	@Override
+	public Create toCreateNote(ITimelineElement element, String authorUsername) {
+		toNote(element, authorUsername, false);
+		return toCreate(element, toNote(element, authorUsername, false), authorUsername);
+	}
+
+	public Accept toAccept(String username, final Follow follow) {
+		Follow followCopy;
+		try {
+			//copy and remove context
+			followCopy = objectMapper.treeToValue(objectMapper.valueToTree(follow), Follow.class);
+			followCopy.setContext(null);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		} 
+		Accept accept = new Accept();
+		initRoot(accept);
+		accept.setActor(new LinkImpl(getActorUri(username)));
+		accept.setObject(followCopy);
+		if (follow.getId()!=null) {
+			accept.setId(URI.create(networkInfo.getBaseUrl()+URI_PREFIX+"/Accept"+follow.getId().getPath()));	
+		}
+		
+		return accept;
 	}
 
 }

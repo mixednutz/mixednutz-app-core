@@ -23,6 +23,7 @@ import net.mixednutz.api.model.IReshareCount;
 import net.mixednutz.api.model.ITagCount;
 import net.mixednutz.api.model.ITimelineElement;
 import net.mixednutz.api.model.IUserSmall;
+import net.mixednutz.api.model.IVisibility;
 
 @Entity
 @Table(name = "x_content")
@@ -164,6 +165,11 @@ public class ExternalFeedTimelineElement implements ITimelineElement {
 	@Transient
 	public Type getType() {
 		return element.getType();
+	}
+
+	@Transient
+	public IVisibility getVisibility() {
+		return element.getVisibility();
 	}
 
 	@Transient

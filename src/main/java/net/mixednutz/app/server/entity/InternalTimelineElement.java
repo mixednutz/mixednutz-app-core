@@ -8,12 +8,13 @@ import java.util.Map;
 
 import net.mixednutz.api.core.model.Action;
 import net.mixednutz.api.core.model.AlternateLink;
-import net.mixednutz.api.core.model.GroupSmall;
 import net.mixednutz.api.core.model.ReactionCount;
 import net.mixednutz.api.core.model.ReshareCount;
 import net.mixednutz.api.core.model.TagCount;
+import net.mixednutz.api.model.IGroupSmall;
 import net.mixednutz.api.model.ITimelineElement;
 import net.mixednutz.api.model.IUser;
+import net.mixednutz.api.model.IVisibility;
 
 public class InternalTimelineElement implements ITimelineElement {
 	
@@ -66,6 +67,11 @@ public class InternalTimelineElement implements ITimelineElement {
 	 * The type of element
 	 */
 	private Type type;
+	
+	/**
+	 * Who can see this element;
+	 */
+	private IVisibility visibility;
 
 	/**
 	 * User who posted this element
@@ -75,7 +81,7 @@ public class InternalTimelineElement implements ITimelineElement {
 	/**
 	 * Optional group this element was posted to
 	 */
-	private GroupSmall postedToGroup;
+	private IGroupSmall postedToGroup;
 
 	/**
 	 * The date created
@@ -230,6 +236,14 @@ public class InternalTimelineElement implements ITimelineElement {
 		this.type = type;
 	}
 
+	public IVisibility getVisibility() {
+		return visibility;
+	}
+
+	public void setVisibility(IVisibility visibility) {
+		this.visibility = visibility;
+	}
+
 	public IUser getPostedByUser() {
 		return postedByUser;
 	}
@@ -238,11 +252,11 @@ public class InternalTimelineElement implements ITimelineElement {
 		this.postedByUser = postedByUser;
 	}
 
-	public GroupSmall getPostedToGroup() {
+	public IGroupSmall getPostedToGroup() {
 		return postedToGroup;
 	}
 
-	public void setPostedToGroup(GroupSmall postedToGroup) {
+	public void setPostedToGroup(IGroupSmall postedToGroup) {
 		this.postedToGroup = postedToGroup;
 	}
 
