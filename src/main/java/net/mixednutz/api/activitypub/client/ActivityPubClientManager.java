@@ -1,7 +1,6 @@
 package net.mixednutz.api.activitypub.client;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -53,7 +52,7 @@ public class ActivityPubClientManager {
 		List<URI> followers = followerManager.getFollowers(user).stream()
 			.map(f->userProfileRepository.findById(f.getId().getFollowerId()).orElse(new UserProfile()))
 			.filter(p->p.getActivityPubActorUri()!=null)
-			.map(p->p.getActivityPubActorUri())
+			.map(p->URI.create(p.getActivityPubActorUri()))
 			.collect(Collectors.toList());
 		
 		Optional<Link> publicCollection = activity.getTo().stream()

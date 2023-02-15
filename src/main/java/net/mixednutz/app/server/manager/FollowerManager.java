@@ -16,6 +16,13 @@ public interface FollowerManager {
 	
 	List<Follower> getFollowers(User user);
 	
+	/**
+	 * Includes external subscribers
+	 * @param user
+	 * @return
+	 */
+	List<Follower> getAllFollowers(User user);
+	
 	long countFollowers(User user);
 	
 	Optional<Follower> get(FollowerPK id);
@@ -25,5 +32,7 @@ public interface FollowerManager {
 	void acceptFollow(FollowerPK id, Consumer<Follower> onAccept);
 	
 	Follower autoAcceptFollow(FollowerPK id);
+	
+	void unfollow(FollowerPK id, Consumer<Follower> onRequest);
 
 }

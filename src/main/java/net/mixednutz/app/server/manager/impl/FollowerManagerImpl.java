@@ -41,6 +41,12 @@ public class FollowerManagerImpl implements FollowerManager {
 	}
 	
 	@Override
+	public List<Follower> getAllFollowers(User user) {
+		return StreamSupport.stream(followerRepository.getAllFollowers(user).spliterator(),false)
+				.collect(Collectors.toList());
+	}
+	
+	@Override
 	public long countFollowers(User user) {
 		return followerRepository.countFollowers(user);
 	}
@@ -51,6 +57,10 @@ public class FollowerManagerImpl implements FollowerManager {
 	
 	protected Follower save(Follower follower) {
 		return followerRepository.save(follower);
+	}
+	
+	protected void delete(Follower follower) {
+		followerRepository.delete(follower);
 	}
 	
 	public Follower requestFollow(FollowerPK id, Consumer<Follower> onRequest) {
@@ -70,6 +80,14 @@ public class FollowerManagerImpl implements FollowerManager {
 		Follower follower = new Follower(id);
 		follower.setPending(false);
 		return save(follower);
+	}
+
+	@Override
+	public void unfollow(FollowerPK id, Consumer<Follower> onRequest) {
+		get(id).ifPresent(follow->{
+			delete(follow);
+			onRequest.accept(follow);
+		});
 	}
 
 }

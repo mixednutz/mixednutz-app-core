@@ -16,6 +16,7 @@ import org.w3c.activitystreams.model.Note;
 import org.w3c.activitystreams.model.activity.Accept;
 import org.w3c.activitystreams.model.activity.Create;
 import org.w3c.activitystreams.model.activity.Follow;
+import org.w3c.activitystreams.model.activity.Undo;
 import org.w3c.activitystreams.model.actor.Person;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,6 +48,12 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 	public URI getActorUri(String username) {
 		return UriComponentsBuilder
 				.fromHttpUrl(networkInfo.getBaseUrl()+URI_PREFIX+USER_ACTOR_ENDPOINT)
+				.buildAndExpand(Map.of("username",username)).toUri();
+	}
+	
+	public URI getFollowersUri(String username) {
+		return UriComponentsBuilder
+				.fromHttpUrl(networkInfo.getBaseUrl()+URI_PREFIX+USER_FOLLOWERS_ENDPOINT)
 				.buildAndExpand(Map.of("username",username)).toUri();
 	}
 	
@@ -100,7 +107,7 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 		note.setAttributedTo(new LinkImpl(getActorUri(authorUsername)));
 		switch (element.getVisibility().getVisibilityType()) {
 		case ALL_FOLLOWERS:
-			//TODO this is the followers collection
+			note.setTo(List.of(new LinkImpl(getFollowersUri(authorUsername))));
 			break;
 		case ALL_FRIENDS:
 			//TODO collection of actors
@@ -117,6 +124,7 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 		case ALL_USERS:
 		case WORLD:
 			note.setTo(List.of(new LinkImpl(BaseObjectOrLink.PUBLIC)));
+			note.setCc(List.of(new LinkImpl(getFollowersUri(authorUsername))));
 			break;
 		}
 		//TODO implement tags (when search feature is available in mixednutz)
@@ -164,6 +172,8 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 		initRoot(create);
 		create.setActor(new LinkImpl(getActorUri(username)));
 		create.setTo(note.getTo());
+		create.setCc(note.getCc());
+		create.setPublished(note.getPublished());
 		String itemuri = element.getUri();
 		if (element instanceof InternalTimelineElement) {
 			InternalTimelineElement ite = (InternalTimelineElement)element;
@@ -171,7 +181,8 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 				itemuri = ite.getLatestSuburi();
 			}
 		}
-		create.setObject(new LinkImpl(note.getId()));
+		create.setObject(note);
+		note.setContext(null);
 		create.setId(URI.create(networkInfo.getBaseUrl()+CREATE_URI_PREFIX+itemuri));
 		return create;
 	}
@@ -199,6 +210,29 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 		accept.setObject(followCopy);
 		if (follow.getId()!=null) {
 			accept.setId(URI.create(networkInfo.getBaseUrl()+URI_PREFIX+"/Accept"+follow.getId().getPath()));	
+		}
+		
+		return accept;
+	}
+
+	@Override
+	public Accept toAccept(String username, Undo undo) {
+		Undo undoCopy;
+		try {
+			//copy and remove context
+			undoCopy = objectMapper.treeToValue(objectMapper.valueToTree(undo), Undo.class);
+			undoCopy.setContext(null);
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			throw new RuntimeException(e);
+		} 
+		Accept accept = new Accept();
+		initRoot(accept);
+		accept.setActor(new LinkImpl(getActorUri(username)));
+		accept.setObject(undoCopy);
+		if (undo.getId()!=null) {
+			accept.setId(URI.create(networkInfo.getBaseUrl()+URI_PREFIX+"/Accept"+undo.getId().getPath()));	
 		}
 		
 		return accept;

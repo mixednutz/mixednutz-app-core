@@ -9,6 +9,7 @@ import org.w3c.activitystreams.model.Note;
 import org.w3c.activitystreams.model.activity.Accept;
 import org.w3c.activitystreams.model.activity.Create;
 import org.w3c.activitystreams.model.activity.Follow;
+import org.w3c.activitystreams.model.activity.Undo;
 import org.w3c.activitystreams.model.actor.Person;
 
 import net.mixednutz.api.model.ITimelineElement;
@@ -18,7 +19,11 @@ import net.mixednutz.app.server.entity.User;
 public interface ActivityPubManager {
 	
 	public static final String URI_PREFIX = "/activitypub";
+	
 	public static final String USER_ACTOR_ENDPOINT = "/{username}";
+	public static final String USER_FOLLOWERS_ENDPOINT = 
+			"/{username}/followers";
+	
 	public static final String CREATE_URI_PREFIX = URI_PREFIX + "/Create";
 	public static final String NOTE_URI_PREFIX = URI_PREFIX + "/Note";
 	
@@ -37,6 +42,8 @@ public interface ActivityPubManager {
 	Create toCreateNote(ITimelineElement element, String authorUsername);
 	
 	Accept toAccept(String username, Follow follow);
+	
+	Accept toAccept(String username, Undo undo);
 		
 	
 }
