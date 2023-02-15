@@ -13,8 +13,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.w3c.activitystreams.Link;
 import org.w3c.activitystreams.model.ActivityImpl;
 import org.w3c.activitystreams.model.ActorImpl;
+import org.w3c.activitystreams.model.OrderedCollectionImpl;
 
 public class ActivityPubClient {
 	
@@ -52,7 +54,38 @@ public class ActivityPubClient {
 			throw new RuntimeException(e);
 		}
 		
-
+	}
+	
+	public String getFollowers(URI actorUri) {
+		RestTemplate rest = restTemplateBuilder.build();
+		
+		ActorImpl actor = getActor(actorUri);
+		
+		HttpHeaders headers = new HttpHeaders();
+		headers.setAccept(MediaType.parseMediaTypes(
+				"application/ld+json; profile=\"w3.org/ns/activitystreams\""));
+		HttpEntity<String> requestEntity = new HttpEntity<>(headers);
+		
+		try {
+			OrderedCollectionImpl orderedCollection = rest.exchange(actor.getFollowers(), HttpMethod.GET, 
+					requestEntity, OrderedCollectionImpl.class).getBody();
+			
+			if (orderedCollection.getItems()==null && orderedCollection.getFirst() instanceof Link) {
+				Link first = (Link) orderedCollection.getFirst();
+				
+				rest = new RestTemplateBuilder().build();
+				ResponseEntity<String> response = rest.exchange(first.getHref(), HttpMethod.GET, 
+						requestEntity, String.class);
+				
+				return response.getBody();
+			}
+			return "";
+		} catch (HttpClientErrorException e) {
+			LOG.error("Error sending activity", e);
+			System.out.println(e.getStatusCode());
+			System.out.println(e.getResponseBodyAsString());
+			throw new RuntimeException(e);
+		}
 	}
 	
 	public void sendActivity(URI destinationInbox, ActivityImpl activity) {
