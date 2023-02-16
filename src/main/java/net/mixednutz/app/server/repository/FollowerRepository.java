@@ -46,12 +46,24 @@ public interface FollowerRepository extends CrudRepository<Follower, FollowerPK>
 		return findByUserAndPendingAndFollower_LastonlineIsNotNullOrderByFollower_Lastonline_TimestampDesc(user, true);
 	}
 	
+	/**
+	 * Includes Remote Users
+	 * 
+	 * @param user
+	 * @return
+	 */
+	default Iterable<Follower> getAllFollowers(User user) {
+		return findByUserAndPending(user, false);
+	}
+	
 	Iterable<Follower> findByFollowerAndPendingAndUser_LastonlineIsNotNullOrderByUser_Lastonline_TimestampDesc(User follower, boolean pending);
 	
 	long countByFollowerAndPending(User follower, boolean pending);
 	
 	Iterable<Follower> findByUserAndPendingAndFollower_LastonlineIsNotNullOrderByFollower_Lastonline_TimestampDesc(User user, boolean pending);
 	
+	Iterable<Follower> findByUserAndPending(User user, boolean pending);
+		
 	long countByUserAndPending(User user, boolean pending);
 	
 }

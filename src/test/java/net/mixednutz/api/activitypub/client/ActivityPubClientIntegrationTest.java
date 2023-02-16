@@ -2,6 +2,7 @@ package net.mixednutz.api.activitypub.client;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
@@ -26,6 +27,7 @@ import org.springframework.boot.autoconfigure.jackson.Jackson2ObjectMapperBuilde
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.converter.json.Jackson2ObjectMapperBuilder;
 import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
+import org.w3c.activitypub.client.ActivityPubClient;
 import org.w3c.activitypub.util.ProblemHandler;
 import org.w3c.activitystreams.model.ActorImpl;
 import org.w3c.activitystreams.model.BaseObjectOrLink;
@@ -37,6 +39,7 @@ import org.w3c.activitystreams.model.activity.Follow;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
+import com.fasterxml.jackson.databind.deser.impl.ExternalTypeHandler.Builder;
 import com.fasterxml.jackson.databind.module.SimpleModule;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
@@ -54,6 +57,7 @@ public class ActivityPubClientIntegrationTest {
 
 	private static final String REMOTE_ACTOR_URI = "https://universeodon.com/users/festaindctest";
 	private static final String REMOTE_INBOX = "https://universeodon.com/users/festaindctest/inbox";
+	private static final String REMOTE_SHARED_INBOX = "https://universeodon.com/inbox";
 	
 	UserKeyRepository userKeyRepository;
 	UserKeyManager userKeyManager;
@@ -69,7 +73,7 @@ public class ActivityPubClientIntegrationTest {
 	    return new Jackson2ObjectMapperBuilderCustomizer() {
 	        @Override
 	        public void customize(Jackson2ObjectMapperBuilder builder) {
-	            builder.modules(new ProblemHandlerModule());
+	        	builder.modulesToInstall(new ProblemHandlerModule());
 	        }
 	    };
 	}
@@ -101,12 +105,15 @@ public class ActivityPubClientIntegrationTest {
 		Jackson2ObjectMapperBuilder b = new Jackson2ObjectMapperBuilder();
 		customizer().customize(b);
 		objectMapper = b.build();
+		JavaTimeModule javaTimeModule=new JavaTimeModule();
+		objectMapper.registerModule(javaTimeModule);
+		objectMapper.configure(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS, false);
 
 		MappingJackson2HttpMessageConverter messageConverter = new MappingJackson2HttpMessageConverter();
 		messageConverter.setPrettyPrint(false);
 		messageConverter.setObjectMapper(objectMapper);
 		restTemplateBuilder = new RestTemplateBuilder()
-//				.messageConverters(messageConverter)
+				.messageConverters(messageConverter)
 				;
 	}
 	
@@ -119,44 +126,65 @@ public class ActivityPubClientIntegrationTest {
 		assertNotNull(actor);
 		assertEquals(REMOTE_INBOX, actor.getInbox().toString());
 		assertNotNull(actor.getPublicKey());
+		assertNotNull(actor.getEndpoints());
+		assertTrue(actor.getEndpoints().containsKey("sharedInbox"));
 		System.out.println("PreferredName " + actor.getPreferredUsername());
 		System.out.println("Inbox: " + actor.getInbox());
+		System.out.println("Followers: " + actor.getFollowers());
+		System.out.println("Shared Inbox: " + actor.getEndpoints().get("sharedInbox"));
+	}
+	
+	@Disabled
+	@Test
+	public void test_getActorsFollowers() {
+		ActivityPubClient client = new ActivityPubClient(restTemplateBuilder, null);
+		
+		String followers = client.getFollowers(URI.create(REMOTE_ACTOR_URI));
+		System.out.println(followers);
 	}
 	
 	@Disabled
 	@Test
 	public void test_sendActivity_Single() throws JsonProcessingException {
 		String testhost = "https://tfemily.com";
-		String actorUriStr = testhost+"/activitypub/Emily";
+		String localActorUriStr = testhost+"/activitypub/Emily";
+		String localFollowersUriStr = testhost+"/activitypub/Emily/followers";
 		String replyTo = "https://universeodon.com/@festaindctest/109846300859849576";
+		String remoteActorStr = REMOTE_ACTOR_URI;
 		//String replyTo = "https://mastodon.social/@Gargron/100254678717223630";
 		String destinationInbox = REMOTE_INBOX;
 		
-		ActivityPubClientManager client = new ActivityPubClientManager(new RestTemplateBuilder(), 
+		ActivityPubClientManager client = new ActivityPubClientManager(restTemplateBuilder, 
 				null, null, userKeyManager);
 		
-		URI actorUri = URI.create(actorUriStr);
+		URI localActorUri = URI.create(localActorUriStr);
+		URI remoteActorUri = URI.create(remoteActorStr);
 		
-				
-//		Create activity = new Create();
-//	    activity.setContext(List.of(BaseObjectOrLink.CONTEXT));
-//	    activity.setId(URI.create(testhost+"/create-hello-world1"));
-//	    activity.setActor(new LinkImpl(actorUri));
-//	    activity.setTo(new LinkImpl(BaseObjectOrLink.PUBLIC));
-//	    Note note = new Note();
-//	    note.setId(URI.create(testhost+"/hello-world1"));
-//	    note.setPublished(ZonedDateTime.now());
-//	    note.setAttributedTo(new LinkImpl(actorUri));
+		ZonedDateTime publishedDate = ZonedDateTime.now();
+		Create activity = new Create();
+	    activity.setContext(List.of(BaseObjectOrLink.CONTEXT));
+	    activity.setPublished(publishedDate);
+	    activity.setId(URI.create("https://tfemily.com/activitypub/Create/Emily/journal/2023/2/8/tv-review-quantum-leap-2022-let-them-play"));
+	    activity.setActor(new LinkImpl(localActorUri));
+	    activity.setTo(List.of(new LinkImpl(BaseObjectOrLink.PUBLIC), new LinkImpl(remoteActorUri)));
+//	    activity.setTo(List.of(new LinkImpl(BaseObjectOrLink.PUBLIC)));
+	    activity.setCc(List.of(new LinkImpl(URI.create(localFollowersUriStr))));
+	    Note note = new Note();
+	    note.setId(URI.create("https://tfemily.com/activitypub/Note/Emily/journal/2023/2/8/tv-review-quantum-leap-2022-let-them-play"));
+	    note.setPublished(publishedDate);
+	    note.setAttributedTo(new LinkImpl(localActorUri));
 //	    note.setInReplyTo(new LinkImpl(replyTo));
-//	    note.setContent("<p>Hello world 1</p>");
-//	    note.setTo(new LinkImpl(BaseObjectOrLink.PUBLIC));
-//	    activity.setObject(note);
+	    note.setContent("<p>Hello world 1</p>");
+	    note.setTo(activity.getTo());
+	    note.setCc(activity.getCc());
+//	    activity.setObject(new LinkImpl(URI.create("https://tfemily.com/activitypub/Note/Emily/journal/2023/2/8/tv-review-quantum-leap-2022-let-them-play")));
 		
 		
-		Follow activity = new Follow();
-		activity.setContext(List.of(BaseObjectOrLink.CONTEXT));
-	    activity.setId(URI.create(testhost+"/my-first-follow"));
-	    activity.setActor(new LinkImpl(actorUri));
+//		Follow activity = new Follow();
+//		activity.setContext(List.of(BaseObjectOrLink.CONTEXT));
+//	    activity.setId(URI.create(testhost+"/my-first-follow"));
+//	    activity.setActor(new LinkImpl(localActorUri));
+//	    activity.setObject(new LinkImpl(remoteActorUri));
 	    
 	    System.out.println(objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(activity));
 		

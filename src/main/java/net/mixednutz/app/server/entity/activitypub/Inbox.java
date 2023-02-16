@@ -1,6 +1,5 @@
 package net.mixednutz.app.server.entity.activitypub;
 
-import java.net.URI;
 import java.time.ZonedDateTime;
 
 import javax.persistence.Entity;
@@ -23,11 +22,11 @@ public class Inbox {
 	
 	private String payload;
 	
-	private URI activityId;
+	private String activityId;
 	
 	private String type;
 	
-	private URI actor;
+	private String actor;
 	
 	private boolean processed = false;
 
@@ -42,11 +41,11 @@ public class Inbox {
 		this.id = id;
 	}
 
-	public URI getActivityId() {
+	public String getActivityId() {
 		return activityId;
 	}
 
-	public void setActivityId(URI activityId) {
+	public void setActivityId(String activityId) {
 		this.activityId = activityId;
 	}
 
@@ -84,11 +83,11 @@ public class Inbox {
 		this.type = type;
 	}
 
-	public URI getActor() {
+	public String getActor() {
 		return actor;
 	}
 
-	public void setActor(URI actor) {
+	public void setActor(String actor) {
 		this.actor = actor;
 	}
 
