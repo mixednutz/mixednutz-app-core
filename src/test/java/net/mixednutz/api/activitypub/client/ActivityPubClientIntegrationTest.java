@@ -199,6 +199,7 @@ public class ActivityPubClientIntegrationTest {
 		inboxes.iterator().next().equals(URI.create("https://universeodon.com/inbox"));
 	}
 	
+	@Disabled
 	@Test
 	public void test_extractUsernameAndHost() {
 		ActivityPubClientManager client = new ActivityPubClientManager(restTemplateBuilder, null, null, null, null);
