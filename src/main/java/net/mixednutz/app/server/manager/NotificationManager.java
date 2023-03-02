@@ -1,6 +1,7 @@
 package net.mixednutz.app.server.manager;
 
 import net.mixednutz.api.core.model.Notification;
+import net.mixednutz.app.server.entity.Follower;
 import net.mixednutz.app.server.entity.User;
 import net.mixednutz.app.server.entity.post.AbstractCommentNotification;
 import net.mixednutz.app.server.entity.post.AbstractCommentReplyNotification;
@@ -25,6 +26,10 @@ public interface NotificationManager {
 	
 	<G extends GroupedPosts<P,C>, P extends Post<C>, C extends PostComment> 
 		void notifyNewAddition(G group, P post);
+	
+	void notifyNewFollower(Follower follower);
+	
+	void markAsRead(User user, User profileUser);
 	
 	public interface PostNotificationFactory<P extends Post<C>, 
 		C extends PostComment, 

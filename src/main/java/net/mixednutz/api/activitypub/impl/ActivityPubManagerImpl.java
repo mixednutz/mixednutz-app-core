@@ -66,7 +66,7 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 		String itemid = element.getUri();
 		if (element instanceof InternalTimelineElement) {
 			InternalTimelineElement ite = (InternalTimelineElement)element;
-			if (ite.getLatestSuburi()!=null) {
+			if (ite.getLatestSuburl()!=null) {
 				itemurl = ite.getLatestSuburl();
 			}
 			if (ite.getLatestSuburi()!=null) {
@@ -83,7 +83,12 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 		}
 		StringBuffer descBuffer = new StringBuffer();
 		if (element.getTitle()!=null) {
-			descBuffer.append("<strong>"+element.getTitle()+"</strong>");
+			descBuffer
+				.append("<strong>")
+				.append("<a href=\""+element.getUrl()+"\">")
+				.append(element.getTitle())
+				.append("</a>")
+				.append("</strong>");
 		}
 		if (element.getDescription()!=null) {
 			descBuffer.append("<p>"+element.getDescription()+"</p>");
@@ -94,7 +99,11 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 				
 				descBuffer.append("<p>");
 				if (ite.getLatestSubtitle()!=null) {
-					descBuffer.append(ite.getLatestSubtitle()).append(" : ");
+					descBuffer
+						.append("<a href=\""+itemurl+"\">")
+						.append(ite.getLatestSubtitle())
+						.append("</a>")
+						.append(" : ");
 					summaryBuffer.append(" - ").append(ite.getLatestSubtitle());
 				}
 				descBuffer.append(ite.getLatestSubdescription());
@@ -236,6 +245,10 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 		}
 		
 		return accept;
+	}
+
+	public void setNetworkInfo(NetworkInfo networkInfo) {
+		this.networkInfo = networkInfo;
 	}
 
 }
