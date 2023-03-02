@@ -14,6 +14,7 @@ import net.mixednutz.app.server.entity.Follower;
 import net.mixednutz.app.server.entity.Follower.FollowerPK;
 import net.mixednutz.app.server.entity.User;
 import net.mixednutz.app.server.manager.FollowerManager;
+import net.mixednutz.app.server.manager.NotificationManager;
 import net.mixednutz.app.server.repository.FollowerRepository;
 
 @Transactional
@@ -22,6 +23,9 @@ public class FollowerManagerImpl implements FollowerManager {
 	
 	@Autowired
 	private FollowerRepository followerRepository;
+	
+	@Autowired
+	private NotificationManager notificationManager;
 
 	@Override
 	public List<Follower> getFollowing(User user) {
@@ -71,7 +75,9 @@ public class FollowerManagerImpl implements FollowerManager {
 	public void acceptFollow(FollowerPK id, Consumer<Follower> onAccept) {
 		get(id).ifPresent(follow->{
 			follow.setPending(false);
-			onAccept.accept(save(follow));
+			follow = save(follow);
+			onAccept.accept(follow);
+			notificationManager.notifyNewFollower(follow);
 		});
 	}
 
@@ -79,7 +85,9 @@ public class FollowerManagerImpl implements FollowerManager {
 	public Follower autoAcceptFollow(FollowerPK id) {
 		Follower follower = new Follower(id);
 		follower.setPending(false);
-		return save(follower);
+		follower = save(follower);
+		notificationManager.notifyNewFollower(follower);
+		return follower;
 	}
 
 	@Override
