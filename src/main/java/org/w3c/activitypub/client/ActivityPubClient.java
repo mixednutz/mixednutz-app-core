@@ -49,8 +49,10 @@ public class ActivityPubClient {
 			return response.getBody();
 		} catch (HttpClientErrorException e) {
 			LOG.error("Error sending activity", e);
-			System.out.println(e.getStatusCode());
-			System.out.println(e.getResponseBodyAsString());
+			LOG.error("Error sending activity {}; Status:{}; Body:{}", 
+					e.getMessage(), 
+					e.getStatusCode(),
+					e.getResponseBodyAsString());
 			throw new RuntimeException(e);
 		}
 		
@@ -82,8 +84,10 @@ public class ActivityPubClient {
 			return "";
 		} catch (HttpClientErrorException e) {
 			LOG.error("Error sending activity", e);
-			System.out.println(e.getStatusCode());
-			System.out.println(e.getResponseBodyAsString());
+			LOG.error("Error sending activity {}; Status:{}; Body:{}", 
+					e.getMessage(), 
+					e.getStatusCode(),
+					e.getResponseBodyAsString());
 			throw new RuntimeException(e);
 		}
 	}
@@ -115,9 +119,10 @@ public class ActivityPubClient {
 			LOG.info("Response Body: {}",response.getBody());
 		} catch (HttpClientErrorException e) {
 			LOG.error("Error sending activity", e);
-			LOG.error("Response Body: {}", e.getResponseBodyAsString());
-			System.out.println(e.getStatusCode());
-			System.out.println(e.getResponseBodyAsString());
+			LOG.error("Error sending activity {}; Status:{}; Body:{}", 
+					e.getMessage(), 
+					e.getStatusCode(),
+					e.getResponseBodyAsString());
 			throw new RuntimeException(e);
 		}
 		
