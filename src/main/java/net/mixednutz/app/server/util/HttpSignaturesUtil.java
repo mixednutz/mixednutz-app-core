@@ -156,7 +156,7 @@ public class HttpSignaturesUtil {
 		try {
 			sig = Signature.getInstance("SHA256withRSA");
 			sig.initSign(privateKey);
-			System.out.println("Signature string: \n"+strToSign);
+			LOG.info("Signature string: \n"+strToSign);
 			sig.update(strToSign.toString().getBytes(StandardCharsets.UTF_8));
 			signature = sig.sign();
 		} catch (Exception e) {
@@ -172,7 +172,7 @@ public class HttpSignaturesUtil {
 				.append("signature=\"").append(Base64.getEncoder()
 						.encodeToString(signature)).append("\"")
 				.toString();
-		System.out.println("Signature: "+ sigHeader);
+		LOG.info("Signature: "+ sigHeader);
 		headers.set("Signature", sigHeader);
 	}
 
@@ -213,7 +213,6 @@ public class HttpSignaturesUtil {
 		//Get Public Key
 		final PublicKey publicKey = publicKeyForKeyId.apply(values.get("keyId"));
 		
-		System.out.println(values.get("signature"));
 		byte[] signature=Base64.getDecoder().decode(values.get("signature"));
 		List<String> sigHeaders = Arrays.asList(values.get("headers").split(" "));
 		

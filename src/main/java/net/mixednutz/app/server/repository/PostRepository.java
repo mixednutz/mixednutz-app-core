@@ -93,5 +93,5 @@ public interface PostRepository<P extends Post<C>, C extends PostComment> extend
 	default long countUsersPosts(User owner, User viewer) {
 		return countUsersPosts(owner.getUserId(), viewer!=null?viewer.getUserId():null);
 	}
-	
+		
 }
