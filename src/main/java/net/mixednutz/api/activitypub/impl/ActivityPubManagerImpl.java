@@ -84,11 +84,13 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 		StringBuffer descBuffer = new StringBuffer();
 		if (element.getTitle()!=null) {
 			descBuffer
+				.append("<p>")
 				.append("<strong>")
 				.append("<a href=\""+element.getUrl()+"\">")
 				.append(element.getTitle())
 				.append("</a>")
-				.append("</strong>");
+				.append("</strong>")
+				.append("</p>");
 		}
 		if (element.getDescription()!=null) {
 			descBuffer.append("<p>"+element.getDescription()+"</p>");

@@ -52,7 +52,7 @@ public class ActivityPubManagerImplTest {
 		
 		assertEquals("Title", 
 				note.getSummary());
-		assertEquals("<strong><a href=\"https://mixednutz.net/uri\">Title</a></strong><p>Description</p>", 
+		assertEquals("<p><strong><a href=\"https://mixednutz.net/uri\">Title</a></strong></p><p>Description</p>", 
 				note.getContent());
 		assertEquals("https://mixednutz.net/activitypub/Note/uri", 
 				note.getId().toString());
@@ -79,7 +79,7 @@ public class ActivityPubManagerImplTest {
 		System.out.println(note.getContent());
 		assertEquals("Title - Subtitle", 
 				note.getSummary());
-		assertEquals("<strong><a href=\"https://mixednutz.net/uri\">Title</a></strong><p>Description</p>"
+		assertEquals("<p><strong><a href=\"https://mixednutz.net/uri\">Title</a></strong></p><p>Description</p>"
 				+ "<p><a href=\"https://mixednutz.net/uri/suburi\">Subtitle</a> : Subdescription</p>", 
 				note.getContent());
 		assertEquals("https://mixednutz.net/activitypub/Note/uri/suburi", 
