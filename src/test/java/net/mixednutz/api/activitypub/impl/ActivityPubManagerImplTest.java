@@ -3,12 +3,14 @@ package net.mixednutz.api.activitypub.impl;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.w3c.activitystreams.model.Note;
 
 import net.mixednutz.api.core.model.NetworkInfo;
+import net.mixednutz.api.core.model.TagCount;
 import net.mixednutz.api.core.model.Visibility;
 import net.mixednutz.app.server.entity.InternalTimelineElement;
 
@@ -47,12 +49,13 @@ public class ActivityPubManagerImplTest {
 		element.setUrl(URL);
 		element.setTitle(TITLE);
 		element.setDescription(DESCRIPTION);
-		
+				
 		Note note = manager.toNote(element, "Emily", false);
 		
 		assertEquals("Title", 
 				note.getSummary());
-		assertEquals("<p><strong><a href=\"https://mixednutz.net/uri\">Title</a></strong></p><p>Description</p>", 
+		assertEquals("<p><strong><a href=\"https://mixednutz.net/uri\">Title</a></strong></p>"
+				+ "<p>Description</p>",
 				note.getContent());
 		assertEquals("https://mixednutz.net/activitypub/Note/uri", 
 				note.getId().toString());
@@ -73,19 +76,30 @@ public class ActivityPubManagerImplTest {
 		element.setLatestSuburl(SUBURL);
 		element.setLatestSubtitle(SUBTITLE);
 		element.setLatestSubdescription(SUBDESCRIPTION);
+		element.setTags(List.of(toTagCount("tag1",2),toTagCount("tag2",1)));
 		
 		Note note = manager.toNote(element, "Emily", false);
 		
 		System.out.println(note.getContent());
 		assertEquals("Title - Subtitle", 
 				note.getSummary());
-		assertEquals("<p><strong><a href=\"https://mixednutz.net/uri\">Title</a></strong></p><p>Description</p>"
-				+ "<p><a href=\"https://mixednutz.net/uri/suburi\">Subtitle</a> : Subdescription</p>", 
+		assertEquals("<p><strong><a href=\"https://mixednutz.net/uri\">Title</a></strong></p>"
+				+ "<p>Description</p>"
+				+ "<p><a href=\"https://mixednutz.net/uri/suburi\">Subtitle</a> : Subdescription</p>"
+				+ "<p>#tag1 #tag2</p>", 
 				note.getContent());
 		assertEquals("https://mixednutz.net/activitypub/Note/uri/suburi", 
 				note.getId().toString());
 		assertEquals("https://mixednutz.net/uri/suburi", 
 				note.getUrl());
+	}
+	
+	protected TagCount toTagCount(String tag, int count) {
+		TagCount api = new TagCount();
+		api.setName(tag);
+		api.setDisplayName(tag);
+		api.setCount(count);
+		return api;
 	}
 	
 

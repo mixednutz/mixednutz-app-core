@@ -3,6 +3,7 @@ package net.mixednutz.api.activitypub.impl;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -112,6 +113,13 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 				descBuffer.append("</p>");
 			}
 		}		
+		if (element.getTags()!=null && !element.getTags().isEmpty()) {
+			descBuffer.append("<p>")
+				.append(element.getTags().stream()
+					.map(tag->tag.getName().startsWith("#")?tag.getName():"#"+tag.getName())
+					.collect(Collectors.joining(" ")))
+				.append("</p>");
+		}
 		note.setContent(descBuffer.toString()); 
 		note.setSummary(summaryBuffer.toString());
 		note.setPublished(element.getPostedOnDate());
