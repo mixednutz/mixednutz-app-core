@@ -4,6 +4,8 @@ import java.time.ZonedDateTime;
 import java.util.LinkedHashMap;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
@@ -16,6 +18,8 @@ import net.mixednutz.app.server.repository.UserRepository;
 public class NodeinfoServer {
 		
 	public static final String SCHEMA_URI = "/nodeinfo/2.1";
+	
+	private static final Logger LOG = LoggerFactory.getLogger(NodeinfoServer.class);
 		
 	@Autowired
 	private NodeinfoSchema schema;
@@ -31,6 +35,7 @@ public class NodeinfoServer {
 	
 		
 	public NodeinfoResponse handleNodeinfoRequest() {
+		LOG.info("Nodeinfo lookup");
 		NodeinfoResponse response = new NodeinfoResponse(List.of(new NodeinfoResponse.Link(
 				"http://nodeinfo.diaspora.software/ns/schema/2.1", 
 				"http://"+networkInfo.getHostName()+SCHEMA_URI)));
@@ -40,6 +45,7 @@ public class NodeinfoServer {
 	
 	@Cacheable("nodeinfo-schema")
 	public NodeinfoSchema handleNodeinfoSchemaRequest() {
+		LOG.info("Nodeinfo Schema lookup");
 		//add usage stats
 		schema.setUsage(new LinkedHashMap<>());
 		LinkedHashMap<String,Long> users = new LinkedHashMap<>();
