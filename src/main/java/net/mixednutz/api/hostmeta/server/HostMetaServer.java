@@ -5,6 +5,7 @@ import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Component;
 
 import net.mixednutz.api.core.model.NetworkInfo;
@@ -18,6 +19,7 @@ public class HostMetaServer {
 	@Autowired
 	private NetworkInfo networkInfo;
 
+	@Cacheable("host-meta")
 	public Xrd handleHostMetaRequest() {
 		LOG.info("Host-meta lookup");
 		Link link = new Link("lrdd",
