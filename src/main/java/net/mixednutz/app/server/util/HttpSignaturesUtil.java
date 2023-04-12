@@ -212,6 +212,10 @@ public class HttpSignaturesUtil {
 		
 		//Get Public Key
 		final PublicKey publicKey = publicKeyForKeyId.apply(values.get("keyId"));
+		if (publicKey==null) {
+			LOG.warn("Unable to get public key for {}", values.get("keyId"));
+			return;
+		}
 		
 		byte[] signature=Base64.getDecoder().decode(values.get("signature"));
 		List<String> sigHeaders = Arrays.asList(values.get("headers").split(" "));

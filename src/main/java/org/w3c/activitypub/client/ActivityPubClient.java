@@ -40,7 +40,7 @@ public class ActivityPubClient {
 		
 		HttpHeaders headers = new HttpHeaders();
 		headers.setAccept(MediaType.parseMediaTypes(
-				"application/ld+json; profile=\"w3.org/ns/activitystreams\""));
+				"application/activity+json; profile=\"w3.org/ns/activitystreams\""));
 		HttpEntity<String> requestEntity = new HttpEntity<>(headers);
 		
 		try {
