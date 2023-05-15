@@ -27,4 +27,6 @@ public interface PostNotificationRepository
 		return findByUserIdAndDateCreatedLessThanEqualOrderByDateCreatedDesc(userId, dateCreated, pageRequest);
 	}
 	
+	long deleteByUserId(Long userId); 
+	
 }

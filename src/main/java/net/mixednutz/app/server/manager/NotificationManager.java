@@ -31,6 +31,8 @@ public interface NotificationManager {
 	
 	void markAsRead(User user, User profileUser);
 	
+	void markAllAsRead(User user);
+	
 	public interface PostNotificationFactory<P extends Post<C>, 
 		C extends PostComment, 
 		R extends PostReaction> {
