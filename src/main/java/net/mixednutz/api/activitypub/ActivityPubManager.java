@@ -41,9 +41,9 @@ public interface ActivityPubManager {
 	
 	Create toCreateNote(ITimelineElement element, String authorUsername);
 	
-	Accept toAccept(String username, Follow follow);
+	Accept toAccept(String username, URI destinationActorUri, Follow follow);
 	
-	Accept toAccept(String username, Undo undo);
+	Accept toAccept(String username, URI destinationActorUri, Undo undo);
 		
 	
 }

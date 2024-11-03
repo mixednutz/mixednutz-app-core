@@ -208,6 +208,11 @@ public class ExternalFeedTimelineElement implements ITimelineElement {
 	}
 
 	@Transient
+	public Serializable getReference() {
+		return element.getReference();
+	}
+
+	@Transient
 	public String getTitle() {
 		return element.getTitle();
 	}

@@ -212,7 +212,7 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 		return toCreate(element, toNote(element, authorUsername, false), authorUsername);
 	}
 
-	public Accept toAccept(String username, final Follow follow) {
+	public Accept toAccept(String username, URI destinationActorUri, final Follow follow) {
 		Follow followCopy;
 		try {
 			//copy and remove context
@@ -226,6 +226,7 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 		Accept accept = new Accept();
 		initRoot(accept);
 		accept.setActor(new LinkImpl(getActorUri(username)));
+		accept.setTo(List.of(new LinkImpl(destinationActorUri)));
 		accept.setObject(followCopy);
 		if (follow.getId()!=null) {
 			accept.setId(URI.create(networkInfo.getBaseUrl()+URI_PREFIX+"/Accept"+follow.getId().getPath()));	
@@ -235,7 +236,7 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 	}
 
 	@Override
-	public Accept toAccept(String username, Undo undo) {
+	public Accept toAccept(String username, URI destinationActorUri, final Undo undo) {
 		Undo undoCopy;
 		try {
 			//copy and remove context
@@ -249,6 +250,7 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 		Accept accept = new Accept();
 		initRoot(accept);
 		accept.setActor(new LinkImpl(getActorUri(username)));
+		accept.setTo(List.of(new LinkImpl(destinationActorUri)));
 		accept.setObject(undoCopy);
 		if (undo.getId()!=null) {
 			accept.setId(URI.create(networkInfo.getBaseUrl()+URI_PREFIX+"/Accept"+undo.getId().getPath()));	
@@ -256,6 +258,10 @@ public class ActivityPubManagerImpl implements ActivityPubManager {
 		
 		return accept;
 	}
+	
+//	public ITimelineElement toCommentFromReply() {
+//		
+//	}
 
 	public void setNetworkInfo(NetworkInfo networkInfo) {
 		this.networkInfo = networkInfo;
