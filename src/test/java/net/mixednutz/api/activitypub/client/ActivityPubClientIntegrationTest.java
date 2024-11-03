@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
+import org.ietf.webfinger.client.WebfingerClient;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
@@ -48,7 +49,6 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import net.mixednutz.api.activitypub.impl.ActivityPubManagerImpl;
 import net.mixednutz.api.core.model.NetworkInfo;
 import net.mixednutz.api.core.model.Visibility;
-import net.mixednutz.api.webfinger.client.WebfingerClient;
 import net.mixednutz.app.server.entity.Follower;
 import net.mixednutz.app.server.entity.InternalTimelineElement;
 import net.mixednutz.app.server.entity.Role;

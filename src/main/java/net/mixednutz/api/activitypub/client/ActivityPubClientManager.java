@@ -6,6 +6,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.ietf.webfinger.WebfingerResponse;
+import org.ietf.webfinger.client.WebfingerClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +20,6 @@ import org.w3c.activitystreams.model.ActivityImpl;
 import org.w3c.activitystreams.model.ActorImpl;
 import org.w3c.activitystreams.model.BaseObjectOrLink;
 
-import net.mixednutz.api.webfinger.WebfingerResponse;
-import net.mixednutz.api.webfinger.client.WebfingerClient;
 import net.mixednutz.app.server.entity.User;
 import net.mixednutz.app.server.entity.UserProfile;
 import net.mixednutz.app.server.manager.FollowerManager;
@@ -123,7 +123,12 @@ public class ActivityPubClientManager {
 			Set<URI> inboxes = getInboxes(followers);
 			LOG.info("Sending activity to {} inboxes", inboxes.size());
 			inboxes.forEach(inbox->{
-				sendActivity(inbox, activity, user);
+				try {
+					sendActivity(inbox, activity, user);
+				} catch (Exception e) {
+					// Log and swallow error
+					LOG.error("Unable to post to inbox {}",inbox, e);
+				}
 			});
 			
 		} else {

@@ -3,12 +3,12 @@ package net.mixednutz.api.webfinger.client;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+import org.ietf.webfinger.WebfingerResponse;
+import org.ietf.webfinger.WebfingerResponse.Link;
+import org.ietf.webfinger.client.WebfingerClient;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.web.client.RestTemplateBuilder;
-
-import net.mixednutz.api.webfinger.WebfingerResponse;
-import net.mixednutz.api.webfinger.WebfingerResponse.Link;
 
 
 public class WebfingerClientIntegrationTest {

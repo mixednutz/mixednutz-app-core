@@ -171,6 +171,11 @@ public class InternalTimelineElement implements ITimelineElement {
 	public Long getPaginationId() {
 		return this.id;
 	}
+	
+	@Override
+	public Long getReference() {
+		return this.id;
+	}
 
 	public String getUri() {
 		return uri;

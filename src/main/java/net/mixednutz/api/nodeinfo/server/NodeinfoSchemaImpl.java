@@ -5,8 +5,10 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-public class NodeinfoSchema {
+import software.diaspora.nodeinfo.server.NodeinfoSchema;
 
+public class NodeinfoSchemaImpl implements NodeinfoSchema {
+	
 	private String version = "2.1"; //Node Info Version
 	private Map<String, String> software = new LinkedHashMap<>();
 	private List<String> protocols = List.of("activitypub");
@@ -15,8 +17,7 @@ public class NodeinfoSchema {
 	private Map<String, Object> usage = new LinkedHashMap<>();
 	private Map<String, Object> metadata = new LinkedHashMap<>();
 	
-	public NodeinfoSchema() {
-		super();
+	public NodeinfoSchemaImpl() {
 		software.put("name", "mixednutz");
 		services.put("inbound", new ArrayList<>());
 		services.put("outbound", new ArrayList<>());
@@ -63,6 +64,5 @@ public class NodeinfoSchema {
 	public void setMetadata(Map<String, Object> metadata) {
 		this.metadata = metadata;
 	}
-	
-	
+
 }
