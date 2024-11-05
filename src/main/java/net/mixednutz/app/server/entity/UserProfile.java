@@ -33,6 +33,8 @@ public class UserProfile implements IUserProfile {
 	private Integer twitterAccountId;
 	private Oauth1AuthenticatedFeed twitterAccount;
 	
+	private String blueskyHandle;
+	
 	private String deviantArtUsername;
 	
 	private String fediverseUsername;
@@ -90,6 +92,14 @@ public class UserProfile implements IUserProfile {
 	@NotFound(action=NotFoundAction.IGNORE)
 	public Oauth1AuthenticatedFeed getTwitterAccount() {
 		return twitterAccount;
+	}
+
+	public String getBlueskyHandle() {
+		return blueskyHandle;
+	}
+
+	public void setBlueskyHandle(String blueskyHandle) {
+		this.blueskyHandle = blueskyHandle;
 	}
 
 	public void setUserId(Long userId) {
