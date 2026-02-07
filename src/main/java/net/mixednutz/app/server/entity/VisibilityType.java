@@ -5,6 +5,7 @@ package net.mixednutz.app.server.entity;
  * 
  * <ul>
  * <li>PRIVATE - Only the author of the entity can see it</li>
+ * <li>EXTERNAL LIST - List from an external service</li>
  * <li>SELECT_FOLLOWERS - Only a select list of followers can see it</li>
  * <li>ALL_FOLLOWERS - All followers can see it</li>
  * <li>FRIEND_GROUPS - One or more groups of friends (mutual followers) can see it</li>
@@ -24,6 +25,7 @@ public enum VisibilityType {
 	ALL_FRIENDS, 
 	ALL_FOLLOWERS, 
 	ALL_USERS,
-	WORLD
+	WORLD,
+	EXTERNAL_LIST,
 		
 }

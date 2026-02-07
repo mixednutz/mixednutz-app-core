@@ -41,57 +41,66 @@ public interface PostRepository<P extends Post<C>, C extends PostComment> extend
 
 	@Query("select p from #{#entityName} p"
 			+" left join p.visibility.selectFollowers vsf"
+			+" left join p.visibility.externalList vel"
 			+ " where p.ownerId = :ownerId"+
 			  " and (p.ownerId = :viewerId"
 			  + " or p.authorId = :viewerId"
 			  + " or p.visibility.visibilityType = 'WORLD'"
 			  + " or (p.visibility.visibilityType = 'ALL_USERS' and :viewerId is not null)"
-			  + " or (p.visibility.visibilityType = 'SELECT_FOLLOWERS' and vsf.userId = :viewerId))"
+			  + " or (p.visibility.visibilityType = 'SELECT_FOLLOWERS' and vsf.userId = :viewerId)"
+			  + " or (p.visibility.visibilityType = 'EXTERNAL_LIST' and vel.providerListId in :externalListIds))"
 			  + " and p.datePublished > :datePublished"
 			+ " order by p.datePublished desc")
 	List<P> queryUsersPostsByDatePublishedGreaterThan(
 			@Param("ownerId")Long ownerId, 
 			@Param("viewerId")Long viewerId, 
-			@Param("datePublished")ZonedDateTime datePublished, Pageable pageRequest);
+			@Param("datePublished")ZonedDateTime datePublished, 
+			@Param("externalListIds") List<String> externalListIds, Pageable pageRequest);
 	
-	default List<P> getUsersPostsByDatePublishedGreaterThan(User owner, User viewer, ZonedDateTime datePublished, Pageable pageRequest) {
-		return queryUsersPostsByDatePublishedGreaterThan(owner.getUserId(), viewer!=null?viewer.getUserId():null, datePublished, pageRequest);
+	default List<P> getUsersPostsByDatePublishedGreaterThan(User owner, User viewer, ZonedDateTime datePublished, List<String> externalListIds, Pageable pageRequest) {
+		return queryUsersPostsByDatePublishedGreaterThan(owner.getUserId(), viewer!=null?viewer.getUserId():null, datePublished, externalListIds, pageRequest);
 	}
 	
 
 	@Query("select p from #{#entityName} p"
 			+" left join p.visibility.selectFollowers vsf"
+			+" left join p.visibility.externalList vel"
 			+ " where p.ownerId = :ownerId"+
 			  " and (p.ownerId = :viewerId"
 			  + " or p.authorId = :viewerId"
 			  + " or p.visibility.visibilityType = 'WORLD'"
 			  + " or (p.visibility.visibilityType = 'ALL_USERS' and :viewerId is not null)"
-			  + " or (p.visibility.visibilityType = 'SELECT_FOLLOWERS' and vsf.userId = :viewerId))"
+			  + " or (p.visibility.visibilityType = 'SELECT_FOLLOWERS' and vsf.userId = :viewerId)"
+			  + " or (p.visibility.visibilityType = 'EXTERNAL_LIST' and vel.providerListId in :externalListIds))"
 			  + " and p.datePublished <= :datePublished"
 			+ " order by p.datePublished desc")
 	List<P> queryUsersPostsByDatePublishedLessThanEquals(
 			@Param("ownerId")Long ownerId, 
 			@Param("viewerId")Long viewerId, 
-			@Param("datePublished")ZonedDateTime datePublished, Pageable pageRequest);
+			@Param("datePublished")ZonedDateTime datePublished, 
+			@Param("externalListIds") List<String> externalListIds, Pageable pageRequest);
 	
-	default List<P> getUsersPostsByDatePublishedLessThanEquals(User owner, User viewer, ZonedDateTime datePublished, Pageable pageRequest) {
-		return queryUsersPostsByDatePublishedLessThanEquals(owner.getUserId(), viewer!=null?viewer.getUserId():null, datePublished, pageRequest);
+	default List<P> getUsersPostsByDatePublishedLessThanEquals(User owner, User viewer, ZonedDateTime datePublished, List<String> externalListIds, Pageable pageRequest) {
+		return queryUsersPostsByDatePublishedLessThanEquals(owner.getUserId(), viewer!=null?viewer.getUserId():null, datePublished, externalListIds, pageRequest);
 	}
 	
 	@Query("select count(p) from #{#entityName} p"
 			+" left join p.visibility.selectFollowers vsf"
+			+" left join p.visibility.externalList vel"
 			+ " where p.ownerId = :ownerId"+
 			  " and (p.ownerId = :viewerId"
 			  + " or p.authorId = :viewerId"
 			  + " or p.visibility.visibilityType = 'WORLD'"
 			  + " or (p.visibility.visibilityType = 'ALL_USERS' and :viewerId is not null)"
-			  + " or (p.visibility.visibilityType = 'SELECT_FOLLOWERS' and vsf.userId = :viewerId))")
+			  + " or (p.visibility.visibilityType = 'SELECT_FOLLOWERS' and vsf.userId = :viewerId)"
+			  + " or (p.visibility.visibilityType = 'EXTERNAL_LIST' and vel.providerListId in :externalListIds))")
 	long countUsersPosts(
 			@Param("ownerId")Long ownerId, 
-			@Param("viewerId")Long viewerId);
+			@Param("viewerId")Long viewerId, 
+			@Param("externalListIds") List<String> externalListIds);
 	
-	default long countUsersPosts(User owner, User viewer) {
-		return countUsersPosts(owner.getUserId(), viewer!=null?viewer.getUserId():null);
+	default long countUsersPosts(User owner, User viewer, List<String> externalListIds) {
+		return countUsersPosts(owner.getUserId(), viewer!=null?viewer.getUserId():null, externalListIds);
 	}
 		
 }

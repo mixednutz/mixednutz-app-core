@@ -120,16 +120,21 @@ public class ActivityPubClientManager {
 			.anyMatch(to->BaseObjectOrLink.PUBLIC.equals(to.getHref().toString()));
 		
 		if (hasPublicCollection) {
-			Set<URI> inboxes = getInboxes(followers);
-			LOG.info("Sending activity to {} inboxes", inboxes.size());
-			inboxes.forEach(inbox->{
-				try {
-					sendActivity(inbox, activity, user);
-				} catch (Exception e) {
-					// Log and swallow error
-					LOG.error("Unable to post to inbox {}",inbox, e);
-				}
-			});
+			try {
+				Set<URI> inboxes = getInboxes(followers);
+				LOG.info("Sending activity to {} inboxes", inboxes.size());
+				inboxes.forEach(inbox->{
+					try {
+						sendActivity(inbox, activity, user);
+					} catch (Exception e) {
+						// Log and swallow error
+						LOG.error("Unable to post to inbox {}",inbox, e);
+					}
+				});
+			} catch (Exception e) {
+				LOG.warn("Error sending activity. Fail silently.", e);
+			}
+			
 			
 		} else {
 //			throw new RuntimeException("Cannot determine destination Inbox from addessing!");
