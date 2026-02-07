@@ -40,6 +40,7 @@ public class UserProfile implements IUserProfile {
 	private String fediverseUsername;
 	private String activityPubActorUri;
 	
+	private String patreonUri;
 	
 	public UserProfile() {
 		super();
@@ -164,6 +165,14 @@ public class UserProfile implements IUserProfile {
 
 	public void setFediverseUsername(String fediverseUsername) {
 		this.fediverseUsername = fediverseUsername;
+	}
+
+	public String getPatreonUri() {
+		return patreonUri;
+	}
+
+	public void setPatreonUri(String patreonUri) {
+		this.patreonUri = patreonUri;
 	}
 
 }

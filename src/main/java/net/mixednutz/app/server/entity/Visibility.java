@@ -25,6 +25,7 @@ public class Visibility {
 	private VisibilityType visibilityType;
 	private Set<User> selectFollowers;
 //	private Set<FGroup> friendGroups;
+	private Set<ExternalVisibility> externalList;
 
 	/**
 	 * Default Constructor
@@ -40,14 +41,21 @@ public class Visibility {
 	 */
 	private Visibility(
 			VisibilityType visibilityType, 
-			Set<User> selectFollowers) {
+			Set<User> selectFollowers,
+			Set<ExternalVisibility> externalList) {
 		super();
 		this.visibilityType = visibilityType;
 		this.selectFollowers = selectFollowers;
+		this.externalList = externalList;
 		if (VisibilityType.SELECT_FOLLOWERS.equals(visibilityType) && 
 				(selectFollowers==null||selectFollowers.isEmpty())) {
 			throw new IllegalArgumentException(
-					"SELECT_FOLLOWERS requires a non-empty set of followers");
+					"SELECT_FOLLOWERS requires a non-empty set of selectFollowers");
+		}
+		if (VisibilityType.EXTERNAL_LIST.equals(visibilityType) &&
+				(externalList==null||externalList.isEmpty())) {
+			throw new IllegalArgumentException(
+					"EXTERNAL_LIST requires a non-empty set of externalList");
 		}
 	}
 	/**
@@ -58,7 +66,7 @@ public class Visibility {
 	 * @param visibilityType
 	 */
 	public Visibility(VisibilityType visibilityType) {
-		this(visibilityType, null);
+		this(visibilityType, null, null);
 	}
 	
 	@NotNull
@@ -81,7 +89,14 @@ public class Visibility {
 	public void setSelectFollowers(Set<User> selectFollowers) {
 		this.selectFollowers = selectFollowers;
 	}
-	
+	@ManyToMany(cascade=CascadeType.ALL)
+	@JoinTable
+	public Set<ExternalVisibility> getExternalList() {
+		return externalList;
+	}
+	public void setExternalList(Set<ExternalVisibility> externalList) {
+		this.externalList = externalList;
+	}
 	public static Visibility asPrivate() {
 		return new Visibility(VisibilityType.PRIVATE);
 	}
@@ -91,13 +106,27 @@ public class Visibility {
 	public static Visibility toAllUsers() {
 		return new Visibility(VisibilityType.ALL_USERS);
 	}
+	public static Visibility toAllFollowers() {
+		return new Visibility(VisibilityType.ALL_FOLLOWERS);
+	}
+	public static Visibility toAllFriends() {
+		return new Visibility(VisibilityType.ALL_FRIENDS);
+	}
 	/**
 	 * VisibilityType.SELECT_FOLLOWERS visibility with set of followers.
 	 * 
 	 * @param selectFollowers
 	 */
 	public static Visibility toSelectFollowers(Set<User> selectFollowers) {
-		return new Visibility(VisibilityType.SELECT_FOLLOWERS, selectFollowers);
+		return new Visibility(VisibilityType.SELECT_FOLLOWERS, selectFollowers, null);
+	}
+	/**
+	 * VisibilityType.EXTERNAL_LIST visibility with set of followers.
+	 * 
+	 * @param selectFollowers
+	 */
+	public static Visibility toExternalVisibility(Set<ExternalVisibility> externalVisibility) {
+		return new Visibility(VisibilityType.EXTERNAL_LIST, null, externalVisibility);
 	}
 	
 	

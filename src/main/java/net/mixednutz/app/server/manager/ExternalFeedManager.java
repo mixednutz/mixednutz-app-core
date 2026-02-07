@@ -8,6 +8,7 @@ import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
+import net.mixednutz.api.model.IExternalRole;
 import net.mixednutz.api.model.INetworkInfoSmall;
 import net.mixednutz.api.model.IPage;
 import net.mixednutz.api.model.IPageRequest;
@@ -116,6 +117,24 @@ public interface ExternalFeedManager {
 	 * @param post
 	 */
 	public <P extends IPost> ITimelineElement post(AbstractFeed feed, P post);
+	
+	/**
+	 * Retrieves roles from the client used in posting that will limit visibility.
+	 * 
+	 * @param feed
+	 * @return
+	 */
+	List<? extends IExternalRole> getExternalLists(AbstractFeed feed);
+	
+	/**
+	 * Retrieves roles from the client that the user his assigned to.
+	 * 
+	 * @param feed
+	 * @return
+	 */
+	List<? extends IExternalRole> getExternalListsUserIsOn(AbstractFeed feed);
+		
+	Map<AbstractFeed, List<? extends IExternalRole>> getExternalVisibility(List<AbstractFeed> feeds, String[] externalListIdArray);
 	
 	public Optional<ExternalFeedContent> crosspost(AbstractFeed feed, String text, String url, String[] tags, ExternalFeedContent inReplyTo, HttpServletRequest request);
 	
