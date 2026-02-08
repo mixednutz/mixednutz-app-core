@@ -57,7 +57,7 @@
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<java.version>11</java.version>
 		
-		<mixednutz-java-api-core.version>2.1.4</mixednutz-java-api-core.version>
+		<mixednutz-java-api-core.version>2.1.4.1</mixednutz-java-api-core.version>
 		<activitypub-api-core.version>0.0.7</activitypub-api-core.version>
 		<activitypub-api-rest.version>0.0.1</activitypub-api-rest.version>
 		<spring-social.version>1.1.6.RELEASE</spring-social.version>
