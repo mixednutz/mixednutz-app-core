@@ -39,5 +39,6 @@ public interface Post<C extends PostComment> {
 	String getUri();
 	
 	Visibility getVisibility();
+	void setVisibility(Visibility visibility);
 
 }
