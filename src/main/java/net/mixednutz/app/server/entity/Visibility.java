@@ -1,5 +1,6 @@
 package net.mixednutz.app.server.entity;
 
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -34,12 +35,21 @@ public class Visibility {
 		super();
 	}
 	/**
+	 * Copy Constructor
+	 * @param copy
+	 */
+	public Visibility(Visibility original) {
+		this.visibilityType = original.visibilityType;
+		this.selectFollowers = original.selectFollowers!=null?new LinkedHashSet<>(original.selectFollowers):null;
+		this.externalList = original.externalList!=null?new LinkedHashSet<>(original.externalList):null;
+	}
+	/**
 	 * All possible arguments constructor
 	 * 
 	 * @param visibilityType
 	 * @param selectFollowers
 	 */
-	private Visibility(
+	public Visibility(
 			VisibilityType visibilityType, 
 			Set<User> selectFollowers,
 			Set<ExternalVisibility> externalList) {
