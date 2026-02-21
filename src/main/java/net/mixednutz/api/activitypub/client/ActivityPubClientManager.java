@@ -114,11 +114,17 @@ public class ActivityPubClientManager {
 			.map(p->URI.create(p.getActivityPubActorUri()))
 			.collect(Collectors.toList());
 		
-		boolean hasPublicCollection = activity.getTo().stream()
-			.filter(to->(to instanceof Link))
-			.map(to->(Link)to)
-			.anyMatch(to->BaseObjectOrLink.PUBLIC.equals(to.getHref().toString()));
-		
+		boolean hasPublicCollection;
+		try {
+			hasPublicCollection = activity.getTo().stream()
+					.filter(to->(to instanceof Link))
+					.map(to->(Link)to)
+					.anyMatch(to->BaseObjectOrLink.PUBLIC.equals(to.getHref().toString()));
+		} catch (Exception e) {
+			LOG.warn("Error sending activity. Fail silently.", e);
+			return;
+		}
+				
 		if (hasPublicCollection) {
 			try {
 				Set<URI> inboxes = getInboxes(followers);
