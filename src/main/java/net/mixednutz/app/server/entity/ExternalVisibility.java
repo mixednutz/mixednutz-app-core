@@ -21,7 +21,7 @@ import org.hibernate.annotations.GenericGenerator;
 @Table(name = "x_visibility_list")
 public class ExternalVisibility {
 	
-	private String id; //unique primary key
+	private Long id; //unique primary key
 	private String providerId; //the provider's ID
 	private String providerListId; //The provider's ID for this list.
 	private String name; //the name of the list
@@ -57,10 +57,10 @@ public class ExternalVisibility {
 	@Column(name = "external_visibility_id")
 	@GeneratedValue(strategy = GenerationType.TABLE)
 	@GenericGenerator(name = "system-native", strategy = "native")
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
-	public void setId(String id) {
+	public void setId(Long id) {
 		this.id = id;
 	}
 	
