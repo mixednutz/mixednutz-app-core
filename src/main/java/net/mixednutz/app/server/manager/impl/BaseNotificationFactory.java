@@ -39,5 +39,12 @@ public class BaseNotificationFactory {
 		}
 		return Collections.emptyList();
 	}
+	
+	protected void deleteCommentReplyNotifications(AbstractPostComment comment) {
+		Iterable<CommentReplyNotification> notificationsToDelete = notificationRepository.loadNotifications((criteriaBuilder, itemRoot) ->{
+			return criteriaBuilder.equal(itemRoot.get("commentId"), comment.getCommentId());
+		}, CommentReplyNotification.class);
+		notificationRepository.deleteAll(notificationsToDelete);
+	}
 
 }
