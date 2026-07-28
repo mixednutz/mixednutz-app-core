@@ -18,6 +18,9 @@ public interface NotificationManager {
 	<P extends Post<C>, C extends PostComment> 
 		void notifyNewComment(P replyTo, C comment);
 	
+	<P extends Post<C>, C extends PostComment> 
+		void deleteCommentNotification(C comment);
+	
 	<P extends Post<C>, C extends PostComment, R extends PostReaction> 
 		void notifyNewReaction(P reactedTo, R reaction);
 	
@@ -50,6 +53,8 @@ public interface NotificationManager {
 		Iterable<? extends AbstractCommentReplyNotification<? extends AbstractPostComment>> lookupCommentReplyNotifications(User user, P post);
 		
 		Iterable<? extends AbstractReactionNotification<P,C,R>> lookupReactionNotifications(User user, P reactedTo);
+		
+		void deleteCommentNotifications(C comment);
 	}
 	
 	public interface GroupedPostNotificationFactory<G extends GroupedPosts<P, C>, 
