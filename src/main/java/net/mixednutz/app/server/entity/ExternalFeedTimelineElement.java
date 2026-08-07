@@ -178,6 +178,11 @@ public class ExternalFeedTimelineElement implements ITimelineElement {
 	}
 
 	@Transient
+	public List<? extends IUserSmall> getContributedByUser() {
+		return element.getContributedByUser();
+	}
+
+	@Transient
 	public IGroupSmall getPostedToGroup() {
 		return element.getPostedToGroup();
 	}

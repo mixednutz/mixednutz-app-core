@@ -14,6 +14,7 @@ import net.mixednutz.api.core.model.TagCount;
 import net.mixednutz.api.model.IGroupSmall;
 import net.mixednutz.api.model.ITimelineElement;
 import net.mixednutz.api.model.IUser;
+import net.mixednutz.api.model.IUserSmall;
 import net.mixednutz.api.model.IVisibility;
 
 public class InternalTimelineElement implements ITimelineElement {
@@ -77,6 +78,8 @@ public class InternalTimelineElement implements ITimelineElement {
 	 * User who posted this element
 	 */
 	private IUser postedByUser;
+	
+	private List<IUserSmall> contributedByUser;
 	
 	/**
 	 * Optional group this element was posted to
@@ -255,6 +258,14 @@ public class InternalTimelineElement implements ITimelineElement {
 
 	public void setPostedByUser(IUser postedByUser) {
 		this.postedByUser = postedByUser;
+	}
+
+	public List<IUserSmall> getContributedByUser() {
+		return contributedByUser;
+	}
+
+	public void setContributedByUser(List<IUserSmall> contributedByUser) {
+		this.contributedByUser = contributedByUser;
 	}
 
 	public IGroupSmall getPostedToGroup() {
