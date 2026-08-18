@@ -27,6 +27,8 @@ public interface ApiManager {
 	
 	public IUser toUser(User entity, UserProfile profile);
 	
+	IUser toUser(User entity, String baseUrl);
+	
 	public Optional<Oembed> toOembed(String path, Integer maxwidth, Integer maxheight, String format, 
 			Authentication auth, String baseUrl);
 	
