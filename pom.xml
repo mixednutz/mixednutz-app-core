@@ -4,7 +4,7 @@
 
 	<groupId>net.mixednutz.app.core</groupId>
 	<artifactId>mixednutz-app-core</artifactId>
-	<version>2.1.23.1</version>
+	<version>2.1.23.2</version>
 	<packaging>jar</packaging>
 
 	<name>mixednutz-app-core</name>
@@ -29,7 +29,7 @@
 		<connection>scm:git:ssh://git@github.com/mixednutz/mixednutz-app-core.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/mixednutz/mixednutz-app-core.git</developerConnection>
 		<url>https://github.com/mixednutz/mixednutz-app-core</url>
-		<tag>mixednutz-app-core-2.1.23.1</tag>
+		<tag>mixednutz-app-core-2.1.23.2</tag>
     </scm>
 	
 	<!-- 
@@ -55,11 +55,11 @@
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>11</java.version>
+		<java.version>17</java.version>
 		
-		<mixednutz-api.version>2.1.6.1</mixednutz-api.version>
-		<activitypub-api-core.version>0.0.7</activitypub-api-core.version>
-		<activitypub-api-rest.version>0.0.1</activitypub-api-rest.version>
+		<mixednutz-api.version>2.1.6.2</mixednutz-api.version>
+		<activitypub-api-core.version>0.0.7.1</activitypub-api-core.version>
+		<activitypub-api-rest.version>0.0.1.1</activitypub-api-rest.version>
 		<spring-social.version>1.1.6.RELEASE</spring-social.version>
 	</properties>
 
